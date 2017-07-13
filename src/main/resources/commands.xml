@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<commands xmlns="http://epam.com/movierating_commands"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://epam.com/movierating_commands commands.xsd ">
+
+    <!--general commands-->
+    <command>
+        <command-name>show-welcome-page</command-name>
+        <command-class>by.epam.movierating.command.impl.general.ShowWelcomePageCommand</command-class>
+    </command>
+    <command>
+        <command-name>show-admin-page</command-name>
+        <command-class>by.epam.movierating.command.impl.general.ShowAdminPageCommand</command-class>
+    </command>
+    <command>
+        <command-name>redirect</command-name>
+        <command-class>by.epam.movierating.command.impl.general.RedirectCommand</command-class>
+    </command>
+
+    <!--user commands-->
+    <command>
+        <command-name>log-in</command-name>
+        <command-class>by.epam.movierating.command.impl.user.LogInCommand</command-class>
+    </command>
+    <command>
+        <command-name>log-out</command-name>
+        <command-class>by.epam.movierating.command.impl.user.LogOutCommand</command-class>
+    </command>
+    <command>
+        <command-name>register</command-name>
+        <command-class>by.epam.movierating.command.impl.user.RegisterCommand</command-class>
+    </command>
+    <command>
+        <command-name>rate-movie</command-name>
+        <command-class>by.epam.movierating.command.impl.user.RateMovieCommand</command-class>
+    </command>
+    <command>
+        <command-name>update-movie-rating</command-name>
+        <command-class>by.epam.movierating.command.impl.user.UpdateMovieRating</command-class>
+    </command>
+    <command>
+        <command-name>delete-movie-rating</command-name>
+        <command-class>by.epam.movierating.command.impl.user.DeleteMovieRatingCommand</command-class>
+    </command>
+    <command>
+        <command-name>change-language</command-name>
+        <command-class>by.epam.movierating.command.impl.user.ChangeLanguageCommand</command-class>
+    </command>
+    <command>
+        <command-name>show-users</command-name>
+        <command-class>by.epam.movierating.command.impl.admin.ShowUsersCommand</command-class>
+    </command>
+
+    <!--movie commands-->
+    <command>
+        <command-name>show-top-movies</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.ShowTopMoviesCommand</command-class>
+    </command>
+    <command>
+        <command-name>show-most-discussed-movies</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.ShowMostDiscussedMoviesCommand</command-class>
+    </command>
+    <command>
+        <command-name>show-movie-page</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.ShowMoviePageCommand</command-class>
+    </command>
+</commands>

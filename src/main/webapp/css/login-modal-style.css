@@ -1,0 +1,26 @@
+.new-style-modal {
+    width: 375px;
+    opacity: 0.97;
+}
+.new-style-modal-content {
+    border-radius: 3px;
+    font-size: 16px;
+    font-family: Oxygen;
+}
+/*Lato|Nunito|Open+Sans|Oxygen|Poppins|Roboto*/
+.new-style-form-control {
+    border-radius: 3px;
+}
+
+.btn-new-style {
+    border-radius: 3px;
+    font-size: 16px;
+}
+.forgot-psw {
+    margin-top: 8px;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+.new-input-style {
+    font-size: 16px;
+}

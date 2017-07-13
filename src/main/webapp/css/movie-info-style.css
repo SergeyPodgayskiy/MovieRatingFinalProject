@@ -1,0 +1,53 @@
+.movie-poster {
+    /*box-shadow: 0 0 1px rgb(156, 138, 138);*/
+    box-shadow:  0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8
+}
+
+.poster-side {
+    padding-left: 0;
+}
+
+.movie-title-divider {
+    margin-top: 0;
+}
+
+.movie-table {
+    border-collapse: separate;
+}
+
+.movie-table > tbody > tr:first-child > td {
+    border: none;
+}
+
+.movie-table > tbody > tr > td:first-child {
+    width: 43%;
+}
+.movie-table > tbody > tr:last-child:not(.table-footer) > td {
+    border-bottom: 1px solid #ddd;;
+}
+
+.movie-status-side{
+    margin-top: 40px;
+    padding-right: 10%;
+}
+.movie-status-side  span {
+    padding: 0 3% 0 3%;
+}
+
+#rating-section {
+    padding: 20px;
+    border-radius: 2px;
+}
+
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+.movie-input-wrapper {
+    padding-left: 21px;
+}
+#movie-id{
+    display: none;
+}
+
+

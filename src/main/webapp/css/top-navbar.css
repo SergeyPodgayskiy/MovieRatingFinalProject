@@ -1,0 +1,47 @@
+.new-style-navbar {
+    min-height: 65px;
+    border-radius: 0;
+    background-color: #2e353d ;
+    border: 0 solid black;
+}
+.top-nav-inner-wrapper {
+    margin-left: 0;
+    margin-right: 0;
+}
+.valign {
+    /*display: inline;
+    vertical-align: middle;*/
+    line-height: 65px;
+}
+
+#searching_container {
+    padding-top: 15px;
+}
+#search-input-style {
+    color: #e1ffff;
+    background-color:#424b5f;
+    border-color:#424b5f;
+}
+#language-wrapper a, #language-wrapper {
+    color: #e1ffff;
+}
+#language-wrapper a:hover, #language-wrapper a:focus  {
+    color: #96acff;
+}
+.stylish-input-group .input-group-addon{
+    /*background: white !important;*/
+}
+.stylish-input-group .form-control{
+    border-right:0;
+    box-shadow:0 0 0;
+    background-color:#424b5f;
+    border-color:#424b5f;
+    color: #e1ffff;
+}
+.stylish-input-group button{
+    border:0;
+    background:transparent;
+}
+ a#selected-language {
+    color: #96acff;
+}

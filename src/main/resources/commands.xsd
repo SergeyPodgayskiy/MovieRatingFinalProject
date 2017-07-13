@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://epam.com/movierating_commands"
+            xmlns:tns="http://epam.com/movierating_commands"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+    <xsd:element name="commands" type="tns:Commands"/>
+
+    <xsd:complexType name="Commands">
+        <xsd:sequence>
+            <xsd:element name="command" type="tns:Command" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Command">
+        <xsd:sequence>
+            <xsd:element name="command-name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="command-class" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<roles>
+    <guest>
+        <command>show-welcome-page</command>
+        <command>redirect</command>
+        <command>log-in</command>
+        <command>log-out</command>
+        <command>register</command>
+        <command>change-language</command>
+        <command>show-top-movies</command>
+        <command>show-most-discussed-movies</command>
+    </guest>
+    <user>
+        <command>show-welcome-page</command>
+        <command>redirect</command>
+        <command>log-in</command>
+        <command>log-out</command>
+        <command>change-language</command>
+        <command>show-top-movies</command>
+        <command>show-most-discussed-movies</command>
+        <command>show-movie-page</command>
+        <command>rate-movie</command>
+        <command>update-movie-rating</command>
+        <command>delete-movie-rating</command>
+    </user>
+    <admin>
+        <command>show-welcome-page</command>
+        <command>show-admin-page</command>
+        <command>redirect</command>
+        <command>log-in</command>
+        <command>log-out</command>
+        <command>change-language</command>
+        <command>show-top-movies</command>
+        <command>show-most-discussed-movies</command>
+        <command>show-movie-page</command>
+        <command>rate-movie</command>
+        <command>update-movie-rating</command>
+        <command>delete-movie-rating</command>
+        <command>show-users</command>
+        <command>show-user</command>
+    </admin>
+</roles>

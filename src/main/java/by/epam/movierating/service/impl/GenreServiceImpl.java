@@ -14,6 +14,7 @@ import java.util.List;
  *         30.06.2017.
  */
 public class GenreServiceImpl implements GenreService {
+
     @Override
     public List<Genre> getGenresByMovieId(int idMovie, String language) throws ServiceException {
         List<Genre> genreList;
@@ -23,6 +24,19 @@ public class GenreServiceImpl implements GenreService {
             genreList = genreDAO.getGenresByMovieId(idMovie,language);
         } catch (DAOException e) {
             throw new ServiceException("Error during getting list of genres by movieId", e);
+        }
+        return genreList;
+    }
+
+    @Override
+    public List<Genre> getAllGenres(String language) throws ServiceException {
+        List<Genre> genreList;
+        try {
+            DAOFactory daoFactory = DAOFactory.getInstance();
+            GenreDAO genreDAO = daoFactory.getGenreDAO();
+            genreList = genreDAO.getAllGenres(language);
+        } catch (DAOException e) {
+            throw new ServiceException("Error during getting list of all genres", e);
         }
         return genreList;
     }

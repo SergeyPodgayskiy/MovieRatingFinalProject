@@ -168,11 +168,22 @@ public class RatingDAOImpl implements RatingDAO {
         return ratingList;
     }
 
-    private Rating createRating(ResultSet resultSet) throws SQLException {
+    private Rating createRating(ResultSet rs) throws SQLException {
         Rating rating = new Rating();
-        rating.setIdMovie(resultSet.getInt(1));
-        rating.setIdUser(resultSet.getInt(2));
-        rating.setMark(resultSet.getBigDecimal(3));
+
+        rating.setIdMovie(isColumnExist(Column.ID_MOVIE, rs) ?
+                rs.getInt(Column.ID_MOVIE) : -1);
+        rating.setIdUser(isColumnExist(Column.ID_USER, rs) ?
+                rs.getInt(Column.ID_USER) : -1);
+        rating.setMark(isColumnExist(Column.MARK, rs) ?
+                rs.getBigDecimal(Column.MARK) : null);
+
         return rating;
+    }
+
+    private class Column {
+        private static final String ID_MOVIE = "id_movie";
+        private static final String ID_USER = "id_user";
+        private static final String MARK = "mark";
     }
 }

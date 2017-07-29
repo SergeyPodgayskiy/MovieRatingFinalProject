@@ -56,4 +56,20 @@ public class GenreDAOImplTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void getAllGenres() {
+        String language = "en_EN";
+        List<Genre> genreList;
+        int idMovie = 1;
+        try {
+            genreList = genreDAO.getAllGenres(language);
+            Assert.assertNotNull(genreList);
+            for (Genre genre : genreList) {
+                System.out.println(genre.toString());
+            }
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,13 +1,14 @@
 package by.epam.movierating.command.impl.general;
 
 import by.epam.movierating.command.Command;
+import by.epam.movierating.command.constant.AttributeName;
 import by.epam.movierating.command.constant.PageName;
+import by.epam.movierating.command.constant.ParameterName;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 
@@ -22,13 +23,13 @@ public class ShowWelcomePageCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession(true);
         //todo setSession Attributes and create necessary Services and try..catch block below
-     /*   if (session.getAttribute(AttributeName.ROLE).equals(AttributeName.ADMIN)) {
+//        String role = CookieUtil.getCurrentRole(request);
+        String role = (String) request.getSession().getAttribute(AttributeName.ROLE);
+        if (role.equals(ParameterName.ADMIN)) {
             request.getRequestDispatcher(PageName.ADMIN_PAGE).forward(request, response);
         } else {
-            request.getRequestDispatcher(PageName.SHOW_WELCOME_PAGE).forward(request, response);
-        }*/
-        request.getRequestDispatcher(PageName.WELCOME_PAGE).forward(request, response);
+            request.getRequestDispatcher(PageName.WELCOME_PAGE).forward(request, response);
+        }
     }
 }

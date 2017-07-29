@@ -17,13 +17,14 @@ public class Movie implements Serializable {
     private BigDecimal rating;
     private int amountOfReviews;
     private int amountOfMarks;
-    private Date releaseYear;
+    private int releaseYear;
     private String slogan;
     private String posterURL;
     private Time duration;
     private String ageLimit;
     private MovieStatus movieStatus;
     private Date deletedAt;
+    private Date createdAt;
 
     public Movie() {
     }
@@ -52,11 +53,11 @@ public class Movie implements Serializable {
         this.description = description;
     }
 
-    public Date getReleaseYear() {
+    public int getReleaseYear() {
         return releaseYear;
     }
 
-    public void setReleaseYear(Date releaseYear) {
+    public void setReleaseYear(int releaseYear) {
         this.releaseYear = releaseYear;
     }
 
@@ -132,6 +133,13 @@ public class Movie implements Serializable {
         this.deletedAt = deletedAt;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -156,7 +164,10 @@ public class Movie implements Serializable {
         if (description != null ? !description.equals(movie.description) : movie.description != null) {
             return false;
         }
-        if (releaseYear != null ? !releaseYear.equals(movie.releaseYear) : movie.releaseYear != null) {
+        if (releaseYear != movie.releaseYear) {
+            return false;
+        }
+        if (createdAt != null ? !createdAt.equals(movie.createdAt) : movie.createdAt != null) {
             return false;
         }
         return duration != null ? !duration.equals(movie.duration) : movie.duration != null;
@@ -167,8 +178,9 @@ public class Movie implements Serializable {
         int result = id;
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (releaseYear != null ? releaseYear.hashCode() : 0);
+        result = 31 * result + releaseYear;
         result = 31 * result + (duration != null ? duration.hashCode() : 0);
+        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
         return result;
     }
 
@@ -188,6 +200,7 @@ public class Movie implements Serializable {
                 ", ageLimit='" + ageLimit + '\'' +
                 ", movieStatus=" + movieStatus +
                 ", deletedAt=" + deletedAt +
+                ", createdAt=" + createdAt +
                 '}';
     }
 }

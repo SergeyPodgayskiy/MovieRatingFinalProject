@@ -4,7 +4,7 @@ package by.epam.movierating.command.constant;
  * @author serge
  *         28.05.2017.
  */
-public abstract class PageName {
+public final class PageName {
     public static final String WELCOME_PAGE = "index.jsp";
     public static final String ADMIN_PAGE = "WEB-INF/jsp/admin/admin.jsp";
 //    public static final String USER_PAGE = "WEB-INF/jsp/userMainPage.jsp";
@@ -22,4 +22,5 @@ public abstract class PageName {
     public static final String MOVIE_INFO_PAGE = "WEB-INF/jsp/movie/movie-info.jsp";
 
     public static final String USERS_PAGE = "WEB-INF/jsp/admin/users.jsp";
+    public static final String ADD_AND_EDIT_MOVIE_PAGE = "WEB-INF/jsp/admin/add-and-edit-movie.jsp";
 }

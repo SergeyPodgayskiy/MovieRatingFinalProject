@@ -1,11 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="currentLanguage" value="${cookie.userLanguage.value != null ? cookie.userLanguage.value : sessionScope.defaultLanguage}"/>
-<fmt:setLocale value="${currentLanguage}"/>
+<c:set var="language"
+       value="${cookie.userLanguage.value != null ? cookie.userLanguage.value : sessionScope.defaultLanguage}"/>
+<c:set var="userRole" value="${cookie.role.value != null ? cookie.role.value : sessionScope.role}"/>
+<fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="localization" var="loc"/>
 <!DOCTYPE html>
-<html lang="${currentLanguage}">
+<html lang="${language}">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="MovieRating">
@@ -24,15 +26,23 @@
     <link href="${pageContext.request.contextPath}/css/star-rating.min.css" rel="stylesheet">
     <script src="${pageContext.request.contextPath}/js/star-rating.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/movie-info.js" type="text/javascript"></script>
+    <script src="${pageContext.request.contextPath}/js/loader.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Lato|Nunito|Open+Sans|Oxygen|Poppins|Roboto" rel="stylesheet">
     <title>MovieRating</title>
 </head>
 <body>
-
+<div class="loader"></div>
 <div class="container-fluid container-wrapper">
     <div class="row content-wrapper">
         <div class="col-sm-2 col__padding_0">
-            <c:import url="../template/user-navside-menu.jsp"/>
+            <c:choose>
+                <c:when test="${userRole eq 'admin'}">
+                    <c:import url="../template/admin-navside-menu.jsp"/>
+                </c:when>
+                <c:otherwise>
+                    <c:import url="../template/user-navside-menu.jsp"/>
+                </c:otherwise>
+            </c:choose>
         </div>
         <div class="col-sm-10 col__padding_0">
 
@@ -41,7 +51,20 @@
                 <div class="col-sm-12 <%--col__padding_0--%> inner-page__wrapper">
                     <div class="row row__margin_0">
                         <div class="col-sm-12 content-header">
-                            <h1>${movie.title}</h1>
+                            <h1>
+                                ${movie.title}
+                                    <c:if test="${userRole eq 'admin'}">
+                                        <a href="Controller?command=show-edit-movie-page&movieId=${movie.id}&previousPageQuery=${pageContext.request.queryString}"
+                                            class="btn btn-default edit-movie" href="#">
+                                            <i class="fa fa-pencil fa-lg"></i>
+                                            <fmt:message bundle="${loc}" key="edit"/>
+                                        </a>
+                                        <a class="btn btn-danger delete-movie" >
+                                            <i class="fa fa-times fa-lg"></i>
+                                            <fmt:message bundle="${loc}" key="delete"/>
+                                        </a>
+                                    </c:if>
+                            </h1>
                         </div>
                     </div>
                     <hr class="movie-title-divider">
@@ -71,13 +94,23 @@
                                     <tbody>
                                     <tr>
                                         <td><fmt:message bundle="${loc}" key="year"/></td>
-                                        <td><fmt:formatDate pattern = "yyyy" value = "${movie.releaseYear}"/></td>
+                                        <%--<td><fmt:formatDate pattern="yyyy" value="${movie.releaseYear}"/></td>--%>
+                                        <td>${movie.releaseYear}</td>
                                     </tr>
                                     <tr>
                                         <td><fmt:message bundle="${loc}" key="country"/></td>
                                         <td>
                                             <c:forEach var="contry" items="${requestScope.countries}" varStatus="rank">
                                                 ${contry.name}
+                                                ${!rank.last ? ', ' : ''}
+                                            </c:forEach>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><fmt:message bundle="${loc}" key="genre"/></td>
+                                        <td>
+                                            <c:forEach var="genre" items="${requestScope.genres}" varStatus="rank">
+                                                ${genre.name}
                                                 ${!rank.last ? ', ' : ''}
                                             </c:forEach>
                                         </td>
@@ -124,9 +157,13 @@
                                             <fmt:formatDate pattern="hh:mm" value="${movie.duration}"/></td>
                                     </tr>
                                     </tbody>
+
                                 </table>
+
                                 <div class="jumbotron" id="rating-section">
+                                    <div id="message"></div>
                                     <div id="movie-id">${movie.id}</div>
+                                    <%--display : none--%>
                                     <div class="">
                                         <div class="movie-rating">
                                             <label for="input-movie-rating" class="control-label">
@@ -191,7 +228,28 @@
         </div>
     </div>
 </div>
+<!-- Delete Modal -->
+<div class="modal fade" id="delete-movie-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><fmt:message bundle="${loc}" key="confirmation"/></h4>
+            </div>
+            <div class="modal-body">
 
+                <fmt:message bundle="${loc}" key="are.you.sure.you.want.to.delete.movie"/>
+            </div>
+            <div class="modal-footer">
+                <button id="delete-movie-btn" type="button" class="btn btn-primary">
+                    <fmt:message bundle="${loc}" key="delete"/></button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <fmt:message bundle="${loc}" key="cancel"/>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
-
 </html>

@@ -36,7 +36,7 @@
     </command>
     <command>
         <command-name>update-movie-rating</command-name>
-        <command-class>by.epam.movierating.command.impl.user.UpdateMovieRating</command-class>
+        <command-class>by.epam.movierating.command.impl.user.UpdateMovieRatingCommand</command-class>
     </command>
     <command>
         <command-name>delete-movie-rating</command-name>
@@ -45,6 +45,25 @@
     <command>
         <command-name>change-language</command-name>
         <command-class>by.epam.movierating.command.impl.user.ChangeLanguageCommand</command-class>
+    </command>
+    <command>
+        <command-name>check-rate-opportunity</command-name>
+        <command-class>by.epam.movierating.command.impl.user.CheckRateOpportunityCommand</command-class>
+    </command>
+
+
+    <!--admin commands-->
+    <command>
+        <command-name>update-admin-status</command-name>
+        <command-class>by.epam.movierating.command.impl.admin.UpdateAdminStatusCommand</command-class>
+    </command>
+    <command>
+        <command-name>update-ban-status</command-name>
+        <command-class>by.epam.movierating.command.impl.admin.UpdateBanStatusCommand</command-class>
+    </command>
+    <command>
+        <command-name>delete-user</command-name>
+        <command-class>by.epam.movierating.command.impl.admin.DeleteUserCommand</command-class>
     </command>
     <command>
         <command-name>show-users</command-name>
@@ -63,5 +82,100 @@
     <command>
         <command-name>show-movie-page</command-name>
         <command-class>by.epam.movierating.command.impl.movie.ShowMoviePageCommand</command-class>
+    </command>
+    <command>
+        <command-name>create-movie</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.CreateMovieCommand</command-class>
+    </command>
+    <command>
+        <command-name>update-movie</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.UpdateMovieCommand</command-class>
+    </command>
+    <command>
+        <command-name>add-country-for-movie</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.AddCountryForMovieCommand</command-class>
+    </command>
+    <command>
+        <command-name>delete-country-for-movie</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.DeleteCountryForMovieCommand</command-class>
+    </command>
+    <command>
+        <command-name>add-language-dependent-movie-info</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.AddLanguageDependentMovieInfoCommand</command-class>
+    </command>
+    <command>
+        <command-name>add-participant-for-movie</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.AddParticipantForMovieCommand</command-class>
+    </command>
+    <command>
+        <command-name>delete-participant-for-movie</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.DeleteParticipantForMovieCommand</command-class>
+    </command>
+    <command>
+        <command-name>add-genre-for-movie</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.AddGenreForMovieCommand</command-class>
+    </command>
+    <command>
+        <command-name>delete-genre-for-movie</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.DeleteGenreForMovieCommand</command-class>
+    </command>
+    <command>
+        <command-name>check-language-movie-info-by-code</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.CheckLanguageMovieInfoByCodeCommand</command-class>
+    </command>
+    <command>
+        <command-name>get-language-movie-info-by-code</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.GetLanguageMovieInfoByCodeCommand</command-class>
+    </command>
+    <command>
+        <command-name> update-language-dependent-movie-info</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.UpdateLangDependentMovieInfoCommand</command-class>
+    </command>
+    <command>
+        <command-name>delete-movie</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.DeleteMovieCommand</command-class>
+    </command>
+    <command>
+        <command-name>show-edit-movie-page</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.ShowEditMoviePageCommand</command-class>
+    </command>
+    <command>
+        <command-name>get-neutral-movie-information</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.GetNeutralMovieInfoCommand</command-class>
+    </command>
+
+
+    <!--participant commands-->
+    <command>
+        <command-name>get-all-movieroles</command-name>
+        <command-class>by.epam.movierating.command.movierole.GetAllMovieRolesCommand</command-class>
+    </command>
+    <command>
+        <command-name>get-all-participants-by-role-id</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.GetAllParticipantsByRoleIdCommand</command-class>
+    </command>
+    <command>
+        <command-name>get-participants-in-movie</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.GetParticipantsInMovieCommand</command-class>
+    </command>
+
+    <!--countries commands-->
+    <command>
+        <command-name>get-all-countries</command-name>
+        <command-class>by.epam.movierating.command.impl.country.GetAllCountriesCommand</command-class>
+    </command>
+    <command>
+        <command-name>get-countries-in-movie</command-name>
+        <command-class>by.epam.movierating.command.impl.country.GetCountriesInMovieCommand</command-class>
+    </command>
+
+    <!--genres commands-->
+    <command>
+        <command-name>get-all-genres</command-name>
+        <command-class>by.epam.movierating.command.impl.genre.GetAllGenresCommand</command-class>
+    </command>
+    <command>
+        <command-name>get-genres-in-movie</command-name>
+        <command-class>by.epam.movierating.command.impl.genre.GetGenresInMovieCommand</command-class>
     </command>
 </commands>

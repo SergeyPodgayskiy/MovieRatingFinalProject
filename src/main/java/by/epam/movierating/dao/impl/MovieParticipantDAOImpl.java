@@ -23,7 +23,7 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
             "SELECT * FROM participant" +
                     " WHERE movieparticipant.id=?";
     private static final String SQL_GET_PARTICIPANTS_BY_MOVIE_ID =
-            "SELECT participant.*, participant_loc.name, participant_loc.surname " +
+            "SELECT DISTINCT participant.*, participant_loc.name, participant_loc.surname " +
                     " FROM participant" +
                     " INNER JOIN participant_localization AS participant_loc " +
                     " ON participant.id = participant_loc.id_participant" +
@@ -34,6 +34,17 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
                     " ORDER BY participant_loc.name ";
     private static final String SQL_GET_ALL_PARTICIPANTS =
             "SELECT * FROM participant";
+    private static final String SQL_GET_ALL_PARTICIPANTS_BY_ID_ROLE =
+            "SELECT participant.*, participant_loc.name, participant_loc.surname " +
+                    " FROM participant" +
+                    " INNER JOIN participant_localization AS participant_loc " +
+                    " ON participant.id = participant_loc.id_participant" +
+                    " AND participant_loc.language_code = ?" +
+                    " INNER JOIN participant_movierole " +
+                    " ON participant.id = participant_movierole.id_participant" +
+                    " WHERE participant_movierole.id_movierole = ?" +
+                    " ORDER BY participant_loc.name ";
+
     private static final String SQL_UPDATE_PARTICIPANT =
             "UPDATE participant" +
                     " SET country_code = ?, name = ?, surname = ?, birth_date = ?, sex = ?" +
@@ -42,6 +53,18 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
             "UPDATE participant SET deleted_at = ? WHERE id = ?";
     private static final String SQL_UPDATE_PARTICIPANT_PHOTO =
             "UPDATE participant SET photo_url = ? WHERE id = ?";
+    private static final String SQL_GET_PARTICIPANTS_IN_MOVIE_BY_ID_ROLE =
+            "SELECT participant.*, participant_loc.name, participant_loc.surname " +
+                    " FROM participant" +
+                    " INNER JOIN participant_localization AS participant_loc " +
+                    " ON participant.id = participant_loc.id_participant" +
+                    " AND participant_loc.language_code = ?" +
+                    " INNER JOIN movie_participant " +
+                    " ON participant.id = movie_participant.id_participant" +
+                    " WHERE movie_participant.id_movierole = ?" +
+                    " AND movie_participant.id_movie = ?" +
+                    " ORDER BY participant_loc.name ";
+
 
     @Override
     public int addMovieParticipant(MovieParticipant movieParticipant) throws DAOException {
@@ -113,7 +136,7 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
             ConnectionPool connectionPool = ConnectionPool.getInstance();
             connection = connectionPool.getConnection();
             preparedStatement = connection.prepareStatement(SQL_GET_PARTICIPANTS_BY_MOVIE_ID);
-            preparedStatement.setString(1,language);
+            preparedStatement.setString(1, language);
             preparedStatement.setInt(2, idMovie);
             resultSet = preparedStatement.executeQuery();
             participantsList = setDataForParticipants(resultSet);
@@ -147,6 +170,33 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
             close(connection, preparedStatement, resultSet);
         }
         return participantsList;
+    }
+
+
+    @Override
+    public List<MovieParticipant> getAllParticipantsByRoleId(int roleId, String language)
+            throws DAOException {
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<MovieParticipant> participantList;
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+            connection = connectionPool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_GET_ALL_PARTICIPANTS_BY_ID_ROLE);
+            preparedStatement.setString(1, language);
+            preparedStatement.setInt(2, roleId);
+            resultSet = preparedStatement.executeQuery();
+            participantList = setDataForParticipants(resultSet);
+        } catch (ConnectionPoolException e) {
+            throw new DAOException("Can not get a connection", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error during SQL_GET_ALL_PARTICIPANTS_BY_ID_ROLE  query", e);
+        } finally {
+            close(connection, preparedStatement, resultSet);
+        }
+        return participantList;
     }
 
     @Override
@@ -222,6 +272,35 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
         return isPhotoUploaded;
     }
 
+    @Override
+    public List<MovieParticipant> getParticipantsInMovieByRole(int movieId,
+                                                               int roleId,
+                                                               String currentLanguage)
+            throws DAOException {
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<MovieParticipant> participantList;
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+            connection = connectionPool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_GET_PARTICIPANTS_IN_MOVIE_BY_ID_ROLE);
+            preparedStatement.setString(1, currentLanguage);
+            preparedStatement.setInt(2, roleId);
+            preparedStatement.setInt(3, movieId);
+            resultSet = preparedStatement.executeQuery();
+            participantList = setDataForParticipants(resultSet);
+        } catch (ConnectionPoolException e) {
+            throw new DAOException("Can not get a connection", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error during SQL_GET_PARTICIPANTS_IN_MOVIE_BY_ID_ROLE query", e);
+        } finally {
+            close(connection, preparedStatement, resultSet);
+        }
+        return participantList;
+    }
+
     private MovieParticipant setDataForOneParticipant(ResultSet resultSet)
             throws SQLException {
         MovieParticipant movieParticipant = null;
@@ -241,19 +320,39 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
         return participantList;
     }
 
-    private MovieParticipant createMovieParticipant(ResultSet resultSet)
-            throws SQLException {
+    private MovieParticipant createMovieParticipant(ResultSet rs) throws SQLException {
         MovieParticipant movieParticipant = new MovieParticipant();
-        movieParticipant.setId(resultSet.getInt(1));
-        Country country = new Country();
-        country.setCode(resultSet.getString(2));
-        movieParticipant.setCountry(country); //todo think aount it
-        movieParticipant.setBirthDate(resultSet.getDate(3));
-        movieParticipant.setPhotoURL(resultSet.getString(4));
-        movieParticipant.setAmountOfMovies(resultSet.getInt(5));
-        movieParticipant.setDeletedAt(resultSet.getDate(6));
-        movieParticipant.setName(resultSet.getString(7));
-        movieParticipant.setSurname(resultSet.getString(8));
+
+        movieParticipant.setId(isColumnExist(Column.ID, rs) ?
+                rs.getInt(Column.ID) : -1);
+        if (isColumnExist(Column.COUNTRY_CODE, rs)) {
+            Country country = new Country();
+            country.setCode(rs.getString(Column.COUNTRY_CODE));
+            movieParticipant.setCountry(country);
+        }
+        movieParticipant.setBirthDate(isColumnExist(Column.BIRTH_DATE, rs) ?
+                rs.getDate(Column.BIRTH_DATE) : null);
+        movieParticipant.setPhotoURL(isColumnExist(Column.PHOTO_URL, rs) ?
+                rs.getString(Column.PHOTO_URL) : null);
+        movieParticipant.setAmountOfMovies(isColumnExist(Column.AMOUNT_OF_MOVIES, rs) ?
+                rs.getInt(Column.AMOUNT_OF_MOVIES) : -1);
+        movieParticipant.setDeletedAt(isColumnExist(Column.DELETED_AT, rs) ?
+                rs.getDate(Column.DELETED_AT) : null);
+        movieParticipant.setName(isColumnExist(Column.NAME, rs) ?
+                rs.getString(Column.NAME) : null);
+        movieParticipant.setSurname(isColumnExist(Column.SURNAME, rs) ?
+                rs.getString(Column.SURNAME) : null);
         return movieParticipant;
+    }
+
+    private class Column {
+        private static final String ID = "id";
+        private static final String COUNTRY_CODE = "country_code";
+        private static final String BIRTH_DATE = "birth_date";
+        private static final String PHOTO_URL = "photo_url";
+        private static final String AMOUNT_OF_MOVIES = "amount_of_movies";
+        private static final String DELETED_AT = "deleted_at";
+        private static final String NAME = "name";
+        private static final String SURNAME = "surname";
     }
 }

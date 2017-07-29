@@ -12,6 +12,7 @@ import by.epam.movierating.service.factory.ServiceFactory;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -35,21 +36,23 @@ public class LogInCommand implements Command {
         try {
             User user = userService.logIn(login, password);
             if (user != null) {
-                HttpSession session = request.getSession(); //todo move it
-                session.setAttribute(AttributeName.USER_ID, user.getId());
-                session.setAttribute(AttributeName.USER, user);
-                session.setAttribute(AttributeName.IS_BANNED, user.isBanned());
                 if (user.isAdmin()) {
-                    session.setAttribute(AttributeName.ROLE, AttributeName.ADMIN); //todo think about it
+                    HttpSession session = request.getSession();
+                    session.setAttribute(AttributeName.USER, user);
+                    session.setAttribute(AttributeName.USER_ID, user.getId());
+                    session.setAttribute(AttributeName.ROLE, AttributeName.ADMIN);
+                    session.setMaxInactiveInterval(500);
                     response.sendRedirect(PageName.REDIRECT_TO_ADMIN_PAGE);
                 } else {
-                    session.setAttribute(AttributeName.ROLE, AttributeName.USER);
-//                    response.sendRedirect(request.getParameter(AttributeName.PREVIOUS_PAGE_QUERY));
+                    Cookie roleCookie = new Cookie(AttributeName.ROLE, AttributeName.USER);
+                    Cookie userIdCookie = new Cookie(AttributeName.USER_ID, String.valueOf(user.getId()));
+                    response.addCookie(userIdCookie);
+                    response.addCookie(roleCookie);
                     response.sendRedirect(PrevPageQueryUtil.getPrevPageQuery(request));
                 }
             }
         } catch (ServiceException e) {
-            logger.error(e);
+            logger.error("Error during executing LogInCommand", e);
             response.sendRedirect(PageName.ERROR_500_PAGE);
         }
     }

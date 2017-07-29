@@ -8,8 +8,8 @@ import by.epam.movierating.dao.exception.ConnectionPoolException;
 import by.epam.movierating.dao.exception.DAOException;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.Date;
 
 /**
  * @author serge
@@ -18,25 +18,29 @@ import java.util.List;
 public class UserDAOImpl implements UserDAO {
 
     private static final String GET_USER_BY_LOGIN =
-            "SELECT * FROM `user` WHERE login=?";
+            "SELECT * FROM `user` WHERE login=? AND `user`.deleted_at IS NULL ";
     private static final String SQL_REGISTER =
             "INSERT INTO `user`(login, password, email, register_date,full_name)" +
                     " VALUES(?,?,?,?,?)";
     private static final String SQL_GET_USER_BY_ID =
-            "SELECT * FROM `user` WHERE id=?";
+            "SELECT id,country_code,login,email,is_admin,is_banned,register_date,full_name,birth_date," +
+                    " photo_url,amount_of_marks, amount_of_reviews, deleted_at" +
+                    " FROM `user`" +
+                    " WHERE id=?";
     private static final String SQL_GET_ALL_USERS =
             "SELECT user.id, user.login, user.is_admin, user.is_banned, user.deleted_at, " +
                     "user.full_name, user.photo_url, user.register_date" +
-                    " FROM `user`";
+                    " FROM `user`" +
+                    "WHERE user.deleted_at IS NULL ";
     private static final String SQL_UPDATE_USER =
             "UPDATE `user` SET login=?, email=?,  is_admin=?, is_banned=?, register_date=?, " +
                     "WHERE id=?";
     private static final String SQL_DELETE_USER =
-            "UPDATE `user` SET deleted_at=? WHERE id=?";
-    private static final String SQL_BAN_USER =
-            "UPDATE `user` SET is_banned=1 WHERE id=?";
-    private static final String SQL_UNBAN_USER =
-            "UPDATE `user` SET is_banned=0 WHERE id=?";
+            "UPDATE `user` SET user.deleted_at=? WHERE user.id=?";
+    private static final String SQL_UPDATE_ADMIN_STATUS =
+            "UPDATE user SET user.is_admin = ? WHERE user.id = ?";
+    private static final String SQL_UPDATE_BAN_STATUS =
+            "UPDATE user SET user.is_banned = ? WHERE user.id = ?";
 
     @Override
     public int register(User user) throws DAOException {
@@ -178,7 +182,8 @@ public class UserDAOImpl implements UserDAO {
             ConnectionPool connectionPool = ConnectionPool.getInstance();
             connection = connectionPool.getConnection();
             preparedStatement = connection.prepareStatement(SQL_DELETE_USER);
-            preparedStatement.setInt(1, idUser);
+            preparedStatement.setDate(1, convertJavaDateToSqlDate(new Date()));
+            preparedStatement.setInt(2, idUser);
             isDeleted = (preparedStatement.executeUpdate() == oneAffectedRow);
         } catch (ConnectionPoolException e) {
             throw new DAOException("Can not get a connection", e);
@@ -191,47 +196,49 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public boolean banUser(int idUser) throws DAOException {
+    public boolean updateBanStatus(int idUser, boolean banStatus) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        boolean isBanned;
+        boolean isUpdated;
         int oneAffectedRow = 1;
         try {
             ConnectionPool connectionPool = ConnectionPool.getInstance();
             connection = connectionPool.getConnection();
-            preparedStatement = connection.prepareStatement(SQL_BAN_USER);
-            preparedStatement.setInt(1, idUser);
-            isBanned = (preparedStatement.executeUpdate() == oneAffectedRow);
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_BAN_STATUS);
+            preparedStatement.setBoolean(1, banStatus);
+            preparedStatement.setInt(2, idUser);
+            isUpdated = (preparedStatement.executeUpdate() == oneAffectedRow);
         } catch (ConnectionPoolException e) {
             throw new DAOException("Can not get a connection", e);
         } catch (SQLException e) {
-            throw new DAOException("Error during SQL_BAN_USER query", e);
+            throw new DAOException("Error during SQL_UPDATE_BAN_STATUS query", e);
         } finally {
             close(connection, preparedStatement);
         }
-        return isBanned;
+        return isUpdated;
     }
 
     @Override
-    public boolean unbanUser(int idUser) throws DAOException {
+    public boolean updateAdminStatus(int idUser, boolean adminStatus) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        boolean isUnbanned;
+        boolean isUpdated;
         int oneAffectedRow = 1;
         try {
             ConnectionPool connectionPool = ConnectionPool.getInstance();
             connection = connectionPool.getConnection();
-            preparedStatement = connection.prepareStatement(SQL_UNBAN_USER);
-            preparedStatement.setInt(1, idUser);
-            isUnbanned = (preparedStatement.executeUpdate() == oneAffectedRow);
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_ADMIN_STATUS);
+            preparedStatement.setBoolean(1, adminStatus);
+            preparedStatement.setInt(2, idUser);
+            isUpdated = (preparedStatement.executeUpdate() == oneAffectedRow);
         } catch (ConnectionPoolException e) {
             throw new DAOException("Can not get a connection", e);
         } catch (SQLException e) {
-            throw new DAOException("Error during SQL_UNBAN_USER query", e);
+            throw new DAOException("Error during SQL_UPDATE_ADMIN_STATUS query", e);
         } finally {
             close(connection, preparedStatement);
         }
-        return isUnbanned;
+        return isUpdated;
     }
 
     private User setDataForOneUser(ResultSet resultSet) throws SQLException {
@@ -253,58 +260,55 @@ public class UserDAOImpl implements UserDAO {
 
     private User createUser(ResultSet rs) throws SQLException {
         User user = new User();
-        user.setId(rs.getInt(Column.ID.toString()));
-        Country country = new Country();
-        country.setCode(isColumnExist(Column.COUNTRY_CODE.toString(), rs) ?
-                rs.getString(Column.COUNTRY_CODE.toString()) : null);
-        user.setCountry(country);
-        user.setLogin(isColumnExist(Column.LOGIN.toString(), rs) ?
-                rs.getString(Column.LOGIN.toString()) : null);
-        user.setPassword(isColumnExist(Column.PASSWORD.toString(), rs) ?
-                rs.getString(Column.PASSWORD.toString()) : null);
-        user.setEmail(isColumnExist(Column.EMAIL.toString(), rs) ?
-                rs.getString(Column.EMAIL.toString()) : null);
-        user.setAdmin(isColumnExist(Column.IS_ADMIN.toString(), rs) &&
-                rs.getBoolean(Column.IS_ADMIN.toString()));
-        user.setBanned(isColumnExist(Column.IS_BANNED.toString(), rs) &&
-                rs.getBoolean(Column.IS_BANNED.toString()));
-        user.setRegisterDate(isColumnExist(Column.REGISTER_DATE.toString(), rs) ?
-                rs.getDate(Column.REGISTER_DATE.toString()) : null);
-        user.setFullName(isColumnExist(Column.FULL_NAME.toString(), rs) ?
-                rs.getString(Column.FULL_NAME.toString()) : null);
-        user.setBirthDate(isColumnExist(Column.BIRTH_DATE.toString(), rs) ?
-                rs.getDate(Column.BIRTH_DATE.toString()) : null);
-        user.setPhotoURL(isColumnExist(Column.PHOTO_URL.toString(), rs) ?
-                rs.getString(Column.PHOTO_URL.toString()) : null);
-        user.setAmountOfMarks(isColumnExist(Column.AMOUNT_OF_MARKS.toString(), rs) ?
-                rs.getInt(Column.AMOUNT_OF_MARKS.toString()) : 0);
-        user.setAmountOfReviews(isColumnExist(Column.AMOUNT_OF_REVIEWS.toString(), rs) ?
-               rs.getInt(Column.AMOUNT_OF_REVIEWS.toString()) : 0);
-        user.setDeletedAt(isColumnExist(Column.DELETED_AT.toString(),rs) ?
-                rs.getDate(Column.DELETED_AT.toString()) : null);
+
+        user.setId(rs.getInt(Column.ID));
+        if (isColumnExist(Column.COUNTRY_CODE, rs)) {
+            Country country = new Country();
+            country.setCode(rs.getString(Column.COUNTRY_CODE));
+            user.setCountry(country);
+        }
+        user.setLogin(isColumnExist(Column.LOGIN, rs) ?
+                rs.getString(Column.LOGIN) : null);
+        user.setPassword(isColumnExist(Column.PASSWORD, rs) ?
+                rs.getString(Column.PASSWORD) : null);
+        user.setEmail(isColumnExist(Column.EMAIL, rs) ?
+                rs.getString(Column.EMAIL) : null);
+        user.setAdmin(isColumnExist(Column.IS_ADMIN, rs) &&
+                rs.getBoolean(Column.IS_ADMIN));
+        user.setBanned(isColumnExist(Column.IS_BANNED, rs) &&
+                rs.getBoolean(Column.IS_BANNED));
+        user.setRegisterDate(isColumnExist(Column.REGISTER_DATE, rs) ?
+                rs.getDate(Column.REGISTER_DATE) : null);
+        user.setFullName(isColumnExist(Column.FULL_NAME, rs) ?
+                rs.getString(Column.FULL_NAME) : null);
+        user.setBirthDate(isColumnExist(Column.BIRTH_DATE, rs) ?
+                rs.getDate(Column.BIRTH_DATE) : null);
+        user.setPhotoURL(isColumnExist(Column.PHOTO_URL, rs) ?
+                rs.getString(Column.PHOTO_URL) : null);
+        user.setAmountOfMarks(isColumnExist(Column.AMOUNT_OF_MARKS, rs) ?
+                rs.getInt(Column.AMOUNT_OF_MARKS) : 0);
+        user.setAmountOfReviews(isColumnExist(Column.AMOUNT_OF_REVIEWS, rs) ?
+                rs.getInt(Column.AMOUNT_OF_REVIEWS) : 0);
+        user.setDeletedAt(isColumnExist(Column.DELETED_AT, rs) ?
+                rs.getDate(Column.DELETED_AT) : null);
 
         return user;
     }
 
-    private static boolean isColumnExist(String columnName, ResultSet rs) throws SQLException {
-        ResultSetMetaData meta = rs.getMetaData();
-        int numCol = meta.getColumnCount();
-        for (int i = 1; i <= numCol; i++) {
-            if (meta.getColumnName(i).equalsIgnoreCase(columnName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private enum Column {
-        ID, COUNTRY_CODE, LOGIN, PASSWORD, EMAIL, IS_ADMIN,
-        IS_BANNED, REGISTER_DATE, FULL_NAME, BIRTH_DATE, PHOTO_URL,
-        AMOUNT_OF_MARKS, AMOUNT_OF_REVIEWS, DELETED_AT;
-
-        @Override
-        public String toString() {
-            return name().toLowerCase();
-        }
+    private class Column {
+        private static final String ID = "id";
+        private static final String COUNTRY_CODE = "country_code";
+        private static final String LOGIN = "login";
+        private static final String PASSWORD = "password";
+        private static final String EMAIL = "email";
+        private static final String IS_ADMIN = "is_admin";
+        private static final String IS_BANNED = "is_banned";
+        private static final String REGISTER_DATE = "register_date";
+        private static final String BIRTH_DATE = "birth_date";
+        private static final String FULL_NAME = "full_name";
+        private static final String PHOTO_URL = "photo_url";
+        private static final String AMOUNT_OF_MARKS = "amount_of_marks";
+        private static final String AMOUNT_OF_REVIEWS = "amount_of_reviews";
+        private static final String DELETED_AT = "deleted_at";
     }
 }

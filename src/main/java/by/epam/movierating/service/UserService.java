@@ -17,4 +17,12 @@ public interface UserService {
     User logIn(String login, byte[] password) throws ServiceException;
 
     List<User> getAllUser() throws ServiceException;
+
+    User getUserById(int idUser) throws ServiceException;
+
+    boolean updateAdminStatus(int idUser, boolean currentAdminStatus) throws ServiceException;
+
+    boolean updateBanStatus(int idUser, boolean currentBanStatus) throws ServiceException;
+
+    boolean deleteUserById(int idUser) throws ServiceException;
 }

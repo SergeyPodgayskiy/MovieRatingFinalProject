@@ -7,8 +7,6 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,14 +19,16 @@ import java.util.Map;
 public final class CommandParserUtil {
     private static final Logger logger = Logger.getLogger(CommandParserUtil.class);
     private static final CommandParserUtil INSTANCE = new CommandParserUtil();
-    private static final String COMMANDS_XML_PATH = "D:\\Epam\\Final_Project_MovieRating\\src\\main\\resources\\commands.xml";
-//    private final String COMMANDS_XML_PATH = "/commands.xml";//todo correct path
+    private final String COMMANDS_XML_PATH = "/commands.xml";
     private XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
     private XMLStreamReader xmlStreamReader;
-    private Map<String, Command> mapOfCommands;
+    private Map<String, Command> commandMap;
     private String tagName;
     private String commandName;
     private Command commandInstance;
+
+    private static final String CHILD_TAG = "command";
+    private static final String ROOT_TAG = "commands";
 
     private CommandParserUtil() {
     }
@@ -39,16 +39,16 @@ public final class CommandParserUtil {
 
     public Map<String, Command> parseXML() {
         try {
-            InputStream inputStream = new FileInputStream(COMMANDS_XML_PATH);
+            InputStream inputStream = getClass().getResourceAsStream(COMMANDS_XML_PATH);
             xmlStreamReader = xmlInputFactory.createXMLStreamReader(inputStream);
-        } catch (FileNotFoundException | XMLStreamException e) {
-            logger.error("Could not find file by path " + COMMANDS_XML_PATH, e);
+        } catch (XMLStreamException e) {
+            logger.error("Error during creating xml stream", e);
         }
-        mapOfCommands = getMapOfCommands();
-        return mapOfCommands;
+        commandMap = getCommandMap();
+        return commandMap;
     }
 
-    private Map<String, Command> getMapOfCommands() {
+    private Map<String, Command> getCommandMap() {
         try {
             while (xmlStreamReader.hasNext()) {
                 int stepType = xmlStreamReader.next();
@@ -65,15 +65,15 @@ public final class CommandParserUtil {
                 }
             }
         } catch (XMLStreamException e) {
-            logger.error("XML Stream error", e);
+            logger.error("xml stream error", e);
         }
-        return mapOfCommands;
+        return commandMap;
     }
 
     private void startElement() {
         tagName = xmlStreamReader.getLocalName();
         if (isRootElementTag(tagName)) {
-            mapOfCommands = new HashMap<>();
+            commandMap = new HashMap<>();
         }
     }
 
@@ -102,17 +102,15 @@ public final class CommandParserUtil {
     private void endElement() {
         tagName = xmlStreamReader.getLocalName();
         if (isChildElementTag(tagName)) {
-            mapOfCommands.put(commandName, commandInstance);
+            commandMap.put(commandName, commandInstance);
         }
     }
 
     private boolean isChildElementTag(String tagName) {
-        String childTag = "command";
-        return tagName.equals(childTag);
+        return tagName.equals(CHILD_TAG);
     }
 
     private boolean isRootElementTag(String tagName) {
-        String rootTag = "commands";
-        return tagName.equals(rootTag);
+        return tagName.equals(ROOT_TAG);
     }
 }

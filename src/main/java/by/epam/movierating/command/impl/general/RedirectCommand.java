@@ -22,17 +22,23 @@ public class RedirectCommand implements Command {
             throws ServletException, IOException {
 
         String redirectPage = request.getParameter(ParameterName.REDIRECT_PAGE);
-        String redirectPagePath = defineRedirectPagePath(redirectPage);
-        request.getRequestDispatcher(redirectPagePath).forward(request, response); // TODO: 22.06.2017 may be change
+
+        if (redirectPage != null) {
+            String redirectPagePath = defineRedirectPagePath(redirectPage);
+            request.getRequestDispatcher(redirectPagePath).forward(request, response);
+        } else {
+            response.sendRedirect(PageName.REDIRECT_TO_WELCOME_PAGE);
+        }
     }
 
     private String defineRedirectPagePath(String redirectPage) {
         switch (redirectPage) {
             case ParameterName.REGISTRATION:
                 return PageName.REGISTRATION_PAGE;
-           /* case ParameterName.ADD_MOVIE: {
-                return PageName.ADD_MOVIE_PAGE;
+            case ParameterName.ADD_MOVIE_PAGE: {
+                return PageName.ADD_AND_EDIT_MOVIE_PAGE;
             }
+           /*
             case ParameterName.SUCCESS_ADD_MOVIE: {
                 return PageName.SUCCESS_MOVIE_ADD;
             }*/

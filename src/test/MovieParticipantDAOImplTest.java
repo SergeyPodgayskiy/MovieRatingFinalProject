@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class MovieParticipantDAOImplTest {
     private static MovieParticipantDAO movieParticipantDAO;
-    private static final String LANGUAGE_EN = "en";
+    private static final String LANGUAGE_EN = "en_EN";
 
     @BeforeClass
     public static void init() {
@@ -42,11 +42,11 @@ public class MovieParticipantDAOImplTest {
     }
 
     @Test
-    public void getMovieParticipantByIdTest()  {
+    public void getMovieParticipantByIdTest() {
         String language = "en_EN";
         MovieParticipant movieParticipant = null;
         try {
-            movieParticipant = movieParticipantDAO.getMovieParticipantById(1,language);
+            movieParticipant = movieParticipantDAO.getMovieParticipantById(1, language);
             Assert.assertNotNull(movieParticipant);
             System.out.println(movieParticipant);
         } catch (DAOException e) {
@@ -60,10 +60,43 @@ public class MovieParticipantDAOImplTest {
         String language = "en_EN";
         int idMovie = 1;
         try {
-            movieParticipantList = movieParticipantDAO.getMovieParticipantsByMovieId(idMovie,language);
+            movieParticipantList = movieParticipantDAO.getMovieParticipantsByMovieId(idMovie, LANGUAGE_EN);
             Assert.assertNotNull(movieParticipantList);
-            for(MovieParticipant movieParticipant : movieParticipantList) {
+            for (MovieParticipant movieParticipant : movieParticipantList) {
                 System.out.println(movieParticipant.toString());
+            }
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getAllParticipantsByRoleID() {
+        List<MovieParticipant> directorList;
+        String language = "en_EN";
+        int idRole = 1; // director
+        try {
+            directorList = movieParticipantDAO.getAllParticipantsByRoleId(idRole, LANGUAGE_EN);
+            Assert.assertNotNull(directorList);
+            for (MovieParticipant director : directorList) {
+                System.out.println(director.toString());
+            }
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getAllParticipantsInMovieByRoleID() {
+        List<MovieParticipant> participantList;
+        int idMovie = 1;
+        int idRole = 3;
+        try {
+            participantList = movieParticipantDAO.getParticipantsInMovieByRole(idMovie,
+                    idRole, LANGUAGE_EN);
+            Assert.assertNotNull(participantList);
+            for (MovieParticipant participant : participantList) {
+                System.out.println(participant.toString());
             }
         } catch (DAOException e) {
             e.printStackTrace();

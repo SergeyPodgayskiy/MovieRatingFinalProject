@@ -172,14 +172,31 @@ public class ReviewDAOImpl implements ReviewDAO {
         return reviewList;
     }
 
-    private Review createReview(ResultSet resultSet) throws SQLException {
+    private Review createReview(ResultSet rs) throws SQLException {
         Review review = new Review();
-        review.setIdUser(resultSet.getInt(1));
-        review.setIdMovie(resultSet.getInt(2));
-        review.setPublicationDate(resultSet.getTimestamp(3));
-        review.setType(resultSet.getString(4));
-        review.setTitle(resultSet.getString(5));
-        review.setText(resultSet.getString(6));
+
+        review.setIdUser(isColumnExist(Column.ID_USER, rs) ?
+                rs.getInt(Column.ID_USER) : -1);
+        review.setIdMovie(isColumnExist(Column.ID_MOVIE, rs) ?
+                rs.getInt(Column.ID_MOVIE) : -1);
+        review.setPublicationDate(isColumnExist(Column.PUBLICATION_DATE, rs) ?
+                rs.getTimestamp(Column.PUBLICATION_DATE) : null);
+        review.setType(isColumnExist(Column.REVIEW_TYPE, rs) ?
+                rs.getString(Column.REVIEW_TYPE) : null);
+        review.setTitle(isColumnExist(Column.TITLE, rs) ?
+                rs.getString(Column.TITLE) : null);
+        review.setText(isColumnExist(Column.TEXT, rs) ?
+                rs.getString(Column.TEXT) : null);
+
         return review;
+    }
+
+    private class Column {
+        private static final String ID_USER = "id_user";
+        private static final String ID_MOVIE = "id_movie";
+        private static final String PUBLICATION_DATE = "publication_date";
+        private static final String REVIEW_TYPE = "review_type";
+        private static final String TITLE = "title";
+        private static final String TEXT = "text";
     }
 }

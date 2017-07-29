@@ -4,7 +4,7 @@ package by.epam.movierating.command.constant;
  * @author serge
  *         28.05.2017.
  */
-public abstract class AttributeName {
+public final class AttributeName {
     // language attributes
     public static final String USER_LANGUAGE ="userLanguage";
     public static final String DEFAULT_LANGUAGE="defaultLanguage";
@@ -42,8 +42,12 @@ public abstract class AttributeName {
 
     //    role attributes
     public static final String ROLE = "role";
+    public static final String DEFAULT_ROLE = "defaultRole";
     public static final String USER = "user";
     public static final String ADMIN = "admin";
     public static final String GUEST = "guest";
 
+    public static final String ADMIN_STATUS = "adminStatus";
+    public static final String BAN_STATUS = "banStatus";
+    public static final String IS_DELETED = "isDeleted";
 }

@@ -1,11 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="currentLanguage" value="${cookie.userLanguage.value != null ? cookie.userLanguage.value : sessionScope.defaultLanguage}"/>
-<fmt:setLocale value="${currentLanguage}"/>
+<c:set var="language" value="${cookie.userLanguage.value != null ? cookie.userLanguage.value : sessionScope.defaultLanguage}"/>
+<c:set var="userRole" value="${cookie.role.value != null ? cookie.role.value : sessionScope.role}"/>
+<fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="localization" var="loc"/>
 <!DOCTYPE html>
-<html lang="${currentLanguage}">
+<html lang="${language}">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="MovieRating">
@@ -21,12 +22,13 @@
     <script src="${pageContext.request.contextPath}/js/jquery.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap-show-password.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/loader.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Lato|Nunito|Open+Sans|Oxygen|Poppins|Roboto" rel="stylesheet">
     <title>Registration</title>
 </head>
-
 <body>
+<div class="loader"></div>
 <div class="container-fluid">
     <div class="row register-page-wrapper">
         <div class="col-md-3">

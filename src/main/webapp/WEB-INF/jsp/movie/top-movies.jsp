@@ -1,11 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="currentLanguage" value="${cookie.userLanguage.value != null ? cookie.userLanguage.value : sessionScope.defaultLanguage}"/>
-<fmt:setLocale value="${currentLanguage}"/>
+<c:set var="language"
+       value="${cookie.userLanguage.value != null ? cookie.userLanguage.value : sessionScope.defaultLanguage}"/>
+<c:set var="userRole" value="${cookie.role.value != null ? cookie.role.value : sessionScope.role}"/>
+<fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="localization" var="loc"/>
 <!DOCTYPE html>
-<html lang="${currentLanguage}">
+<html lang="${language}">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="MovieRating">
@@ -22,15 +24,24 @@
     <script src="${pageContext.request.contextPath}/js/jquery.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/datatables.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/movie-table.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/table.js"></script>
+    <script src="${pageContext.request.contextPath}/js/loader.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Lato|Nunito|Open+Sans|Oxygen|Poppins|Roboto" rel="stylesheet">
     <title>MovieRating</title>
 </head>
 <body>
+<div class="loader"></div>
 <div class="container-fluid container-wrapper">
     <div class="row content-wrapper">
         <div class="col-sm-2 col__padding_0">
-            <c:import url="../template/user-navside-menu.jsp"/>
+            <c:choose>
+                <c:when test="${userRole eq 'admin'}">
+                    <c:import url="../template/admin-navside-menu.jsp"/>
+                </c:when>
+                <c:otherwise>
+                    <c:import url="../template/user-navside-menu.jsp"/>
+                </c:otherwise>
+            </c:choose>
         </div>
         <div class="col-sm-10 col__padding_0">
 
@@ -46,6 +57,14 @@
                         <div class="col-sm-12">
                             <div class="card">
                                 <ul class="nav nav-tabs" role="tablist">
+                                    <c:if test="${userRole eq 'admin'}">
+                                        <li class="">
+                                            <a href="Controller?command=redirect&redirectPage=addMoviePage&previousPageQuery=${pageContext.request.queryString}" role="tab">
+                                                <fmt:message bundle="${loc}" key="add.movie.page"/>
+                                            </a>
+                                        </li>
+                                        </li>
+                                    </c:if>
                                     <li class="active">
                                         <a href="Controller?command=show-top-movies" role="tab">
                                             <fmt:message bundle="${loc}" key="top.50.movies"/>
@@ -93,18 +112,22 @@
                                                             <a href="Controller?command=show-movie-page&movieId=${movie.id}">
                                                                     ${movie.title}
                                                             </a>
-                                                            (<fmt:formatDate pattern = "yyyy" value = "${movie.releaseYear}"/>)
+                                                                        <%-- (<fmt:formatDate pattern="yyyy"
+                                                                                          value="${movie.releaseYear}"/>)--%>
+                                                                        (${movie.releaseYear})
                                                         </td>
                                                         <td class="rating-column">
                                                             <span>
                                                                 <i class="fa fa-star fa-lg"></i>
-                                                                <fmt:formatNumber pattern="0.00" value="${movie.rating}"/>
+                                                                <fmt:formatNumber pattern="0.00"
+                                                                                  value="${movie.rating}"/>
                                                             </span>
                                                         </td>
                                                         <td class="your-rating-column">
                                                             <span>
                                                                 <a href="">
                                                                 <i class="fa fa-star-o fa-lg"></i>
+
                                                                     </a>
                                                             </span>
                                                         </td>

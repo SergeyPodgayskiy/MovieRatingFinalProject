@@ -20,7 +20,11 @@ public class GenreDAOImpl implements GenreDAO {
     private static final String SQL_GET_GENRE_BY_ID =
             "SELECT * FROM `genre` WHERE id=?";
     private static final String SQL_GET_ALL_GENRES =
-            "SELECT * FROM `genre`";
+            "SELECT genre.id, genre_localization.name" +
+                    " FROM `genre`" +
+                    " INNER JOIN genre_localization" +
+                    " ON genre.id = genre_localization.id_genre " +
+                    " AND genre_localization.language_code = ?";
     private static final String SQL_UPDATE_GENRE =
             "UPDATE genre SET name=? WHERE id=?";
     private static final String SQL_DELETE_GENRE =
@@ -48,7 +52,7 @@ public class GenreDAOImpl implements GenreDAO {
             preparedStatement.setString(1, name);
             isAdded = (preparedStatement.executeUpdate() == oneAffectedRow);
             if (isAdded) {
-               genreId = returnGeneratedId(preparedStatement);
+                genreId = returnGeneratedId(preparedStatement);
             } else {
                 throw new DAOException("Creating genre failed, no rows added.");
             }
@@ -110,7 +114,7 @@ public class GenreDAOImpl implements GenreDAO {
     }
 
     @Override
-    public List<Genre> getAllGenres() throws DAOException {
+    public List<Genre> getAllGenres(String language) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -119,6 +123,7 @@ public class GenreDAOImpl implements GenreDAO {
             ConnectionPool connectionPool = ConnectionPool.getInstance();
             connection = connectionPool.getConnection();
             preparedStatement = connection.prepareStatement(SQL_GET_ALL_GENRES);
+            preparedStatement.setString(1, language);
             resultSet = preparedStatement.executeQuery();
             genreList = setDataForGenres(resultSet);
         } catch (ConnectionPoolException e) {
@@ -193,10 +198,19 @@ public class GenreDAOImpl implements GenreDAO {
         return genreList;
     }
 
-    private Genre createGenre(ResultSet resultSet) throws SQLException {
+    private Genre createGenre(ResultSet rs) throws SQLException {
         Genre genre = new Genre();
-        genre.setId(resultSet.getInt(1));
-        genre.setName(resultSet.getString(2));
+
+        genre.setId(isColumnExist(Column.ID, rs) ?
+                rs.getInt(Column.ID) : -1);
+        genre.setName(isColumnExist(Column.NAME, rs) ?
+                rs.getString(Column.NAME) : null);
+
         return genre;
+    }
+
+    private class Column {
+        private static final String ID = "id";
+        private static final String NAME = "name";
     }
 }

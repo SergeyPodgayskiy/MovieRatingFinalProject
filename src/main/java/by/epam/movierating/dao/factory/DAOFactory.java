@@ -16,7 +16,7 @@ public final class DAOFactory {
     private MovieParticipantDAO movieParticipantDAO = new MovieParticipantDAOImpl();
     private RatingDAO ratingDAO = new RatingDAOImpl();
     private ReviewDAO reviewDAO = new ReviewDAOImpl();
-    private ParticipantMovieRoleDAO participantMovieRoleDAO = new ParticipantMovieRoleDAOImpl();
+    private MovieRoleDAO movieRoleDAO = new MovieRoleDAOImpl();
 
     private DAOFactory() {
     }
@@ -53,7 +53,7 @@ public final class DAOFactory {
         return reviewDAO;
     }
 
-    public ParticipantMovieRoleDAO getParticipantMovieRoleDAO() {
-        return participantMovieRoleDAO;
+    public MovieRoleDAO getMovieRoleDAO() {
+        return movieRoleDAO;
     }
 }

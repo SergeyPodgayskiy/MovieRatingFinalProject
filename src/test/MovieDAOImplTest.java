@@ -69,4 +69,15 @@ public class MovieDAOImplTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void addCountryForMovie() {
+        boolean isAdded;
+        try {
+            isAdded = movieDAO.addCountryForMovie(1, "FRA");
+            Assert.assertTrue(isAdded);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
 }

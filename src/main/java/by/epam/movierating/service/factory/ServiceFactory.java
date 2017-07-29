@@ -18,6 +18,8 @@ public final class ServiceFactory {
     private MovieParticipantService movieParticipantService
             = new MovieParticipantServiceImpl();
     private RatingService ratingService = new RatingServiceImpl();
+    private MovieRoleService movieRoleService =
+            new MovieRoleServiceImpl();
 
     private ServiceFactory() {
     }
@@ -52,5 +54,9 @@ public final class ServiceFactory {
 
     public RatingService getRatingService() {
         return ratingService;
+    }
+
+    public MovieRoleService getMovieRoleService() {
+        return movieRoleService;
     }
 }

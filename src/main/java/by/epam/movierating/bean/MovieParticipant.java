@@ -17,7 +17,7 @@ public class MovieParticipant implements Serializable {
     private String photoURL;
     private Date deletedAt;
     private int amountOfMovies;
-    private ParticipantMovieRole participantMovieRole;
+    private MovieRole movieRole;
 
     public MovieParticipant() {
     }
@@ -46,12 +46,12 @@ public class MovieParticipant implements Serializable {
         this.surname = surname;
     }
 
-    public ParticipantMovieRole getParticipantMovieRole() {
-        return participantMovieRole;
+    public MovieRole getMovieRole() {
+        return movieRole;
     }
 
-    public void setParticipantMovieRole(ParticipantMovieRole participantMovieRole) {
-        this.participantMovieRole = participantMovieRole;
+    public void setMovieRole(MovieRole movieRole) {
+        this.movieRole = movieRole;
     }
 
     public Date getBirthDate() {
@@ -132,8 +132,8 @@ public class MovieParticipant implements Serializable {
         if (deletedAt != null ? !deletedAt.equals(participant.deletedAt) : participant.deletedAt != null) {
             return false;
         }
-        return participantMovieRole != null ?
-                participantMovieRole.equals(participant.participantMovieRole) : participant.participantMovieRole == null;
+        return movieRole != null ?
+                movieRole.equals(participant.movieRole) : participant.movieRole == null;
 
     }
 
@@ -147,7 +147,7 @@ public class MovieParticipant implements Serializable {
         result = 31 * result + (photoURL != null ? photoURL.hashCode() : 0);
         result = 31 * result + (deletedAt != null ? deletedAt.hashCode() : 0);
         result = 31 * result + amountOfMovies;
-        result = 31 * result + (participantMovieRole != null ? participantMovieRole.hashCode() : 0);
+        result = 31 * result + (movieRole != null ? movieRole.hashCode() : 0);
         return result;
     }
 
@@ -162,7 +162,7 @@ public class MovieParticipant implements Serializable {
                 ", photoURL='" + photoURL + '\'' +
                 ", deletedAt=" + deletedAt +
                 ", amountOfMovies=" + amountOfMovies +
-                ", participantMovieRole=" + participantMovieRole +
+                ", movieRole=" + movieRole +
                 '}';
     }
 }

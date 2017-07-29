@@ -4,11 +4,12 @@
         <command>show-welcome-page</command>
         <command>redirect</command>
         <command>log-in</command>
-        <command>log-out</command>
         <command>register</command>
         <command>change-language</command>
         <command>show-top-movies</command>
         <command>show-most-discussed-movies</command>
+        <command>show-movie-page</command>
+        <command>check-rate-opportunity</command>
     </guest>
     <user>
         <command>show-welcome-page</command>
@@ -22,6 +23,7 @@
         <command>rate-movie</command>
         <command>update-movie-rating</command>
         <command>delete-movie-rating</command>
+        <command>check-rate-opportunity</command>
     </user>
     <admin>
         <command>show-welcome-page</command>
@@ -38,5 +40,31 @@
         <command>delete-movie-rating</command>
         <command>show-users</command>
         <command>show-user</command>
+        <command>update-admin-status</command>
+        <command>update-ban-status</command>
+        <command>delete-user</command>
+        <command>check-rate-opportunity</command>
+        <command>get-all-movieroles</command>
+        <command>get-all-participants-by-role-id</command>
+        <command>get-all-countries</command>
+        <command>create-movie</command>
+        <command>add-country-for-movie</command>
+        <command>delete-country-for-movie</command>
+        <command>add-language-dependent-movie-info</command>
+        <command>add-participant-for-movie</command>
+        <command>delete-participant-for-movie</command>
+        <command>get-all-genres</command>
+        <command>add-genre-for-movie</command>
+        <command>delete-genre-for-movie</command>
+        <command>update-movie</command>
+        <command>check-language-movie-info-by-code</command>
+        <command>get-language-movie-info-by-code</command>
+        <command>update-language-dependent-movie-info</command>
+        <command>delete-movie</command>
+        <command>show-edit-movie-page</command>
+        <command>get-neutral-movie-information</command>
+        <command>get-participants-in-movie</command>
+        <command>get-genres-in-movie</command>
+        <command>get-countries-in-movie</command>
     </admin>
 </roles>

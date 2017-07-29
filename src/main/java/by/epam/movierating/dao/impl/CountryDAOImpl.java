@@ -23,13 +23,12 @@ public class CountryDAOImpl implements CountryDAO {
     private static final String SQL_ADD_LOCALIZED_COUNTRY_DATA =
             "INSERT INTO country_localization (country_code, language_code, name)" +
                     " VALUES ((SELECT country.code FROM country WHERE country.code = ?),?, ? )";
-    private static final String SQL_GET_ALL_ACTIVE_COUNTRIES =
+    private static final String SQL_GET_ALL_COUNTRIES =
             "SELECT country.code, country.icon_url, country_localization.name FROM country" +
-                    " JOIN country_localization" +
+                    " INNER JOIN country_localization" +
                     " ON country.code = country_localization.country_code" +
                     " AND country_localization.language_code = ?" +
-                    " WHERE deleted_at IS NULL" +
-                    " ORDER BY country_localization.name"; //todo current lang
+                    " ORDER BY country_localization.name";
     private static final String SQL_GET_ALL_DELETED_COUNTRIES =
             "SELECT country.code, country_localization.name, country.deleted_at FROM country" +
                     " JOIN country_localization" +
@@ -98,8 +97,10 @@ public class CountryDAOImpl implements CountryDAO {
         return isAdded;
     }
 
+
+
     @Override
-    public List<Country> getAllCountries() throws DAOException {
+    public List<Country> getAllCountries(String language) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -107,7 +108,8 @@ public class CountryDAOImpl implements CountryDAO {
         try {
             ConnectionPool connectionPool = ConnectionPool.getInstance();
             connection = connectionPool.getConnection();
-            preparedStatement = connection.prepareStatement(SQL_GET_ALL_ACTIVE_COUNTRIES);
+            preparedStatement = connection.prepareStatement(SQL_GET_ALL_COUNTRIES);
+            preparedStatement.setString(1, language);
             resultSet = preparedStatement.executeQuery();
             countryList = setDataForCountries(resultSet);
         } catch (ConnectionPoolException e) {
@@ -130,7 +132,7 @@ public class CountryDAOImpl implements CountryDAO {
             ConnectionPool connectionPool = ConnectionPool.getInstance();
             connection = connectionPool.getConnection();
             preparedStatement = connection.prepareStatement(SQL_GET_COUNTRIES_BY_MOVIE_ID);
-            preparedStatement.setString(1,language);
+            preparedStatement.setString(1, language);
             preparedStatement.setInt(2, idMovie);
             resultSet = preparedStatement.executeQuery();
             countryList = setDataForCountries(resultSet);
@@ -227,11 +229,22 @@ public class CountryDAOImpl implements CountryDAO {
         return countryList;
     }
 
-    private Country createCountry(ResultSet resultSet) throws SQLException {
+    private Country createCountry(ResultSet rs) throws SQLException {
         Country country = new Country();
-        country.setCode(resultSet.getString(1));
-        country.setIconURL(resultSet.getString(2));
-        country.setName(resultSet.getString(3));
+
+        country.setCode(isColumnExist(Column.CODE, rs) ?
+                rs.getString(Column.CODE) : null);
+        country.setIconURL(isColumnExist(Column.ICON_URL, rs) ?
+                rs.getString(Column.ICON_URL) : null);
+        country.setName(isColumnExist(Column.NAME, rs) ?
+                rs.getString(Column.NAME) : null);
+
         return country;
+    }
+
+    private class Column {
+        private static final String CODE = "code";
+        private static final String ICON_URL = "icon_url";
+        private static final String NAME = "name";
     }
 }

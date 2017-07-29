@@ -2,6 +2,7 @@ package by.epam.movierating.dao;
 
 import by.epam.movierating.bean.Movie;
 import by.epam.movierating.dao.exception.DAOException;
+import by.epam.movierating.dao.util.ColumnExistable;
 import by.epam.movierating.dao.util.DAODefaultFunctional;
 import by.epam.movierating.dao.util.JDBCAutocloseable;
 
@@ -11,15 +12,17 @@ import java.util.List;
  * @author serge
  *         02.06.2017.
  */
-public interface MovieDAO extends DAODefaultFunctional, JDBCAutocloseable {
+public interface MovieDAO extends DAODefaultFunctional, JDBCAutocloseable, ColumnExistable {
+
     int addMovie(Movie movie) throws DAOException;
 
-    boolean addGenreForMovie(int idMovie, String genreName) throws DAOException;
+    boolean addLanguageDependentMovieInfo(Movie movie, String contentLanguage) throws DAOException;
 
-    boolean addCountryForMovie(int idMovie, String countryName) throws DAOException;
+    boolean addGenreForMovie(int idMovie, int genreId) throws DAOException;
 
-    boolean addParticipantForMovie(int idMovie, String firstName, String lastName)
-            throws DAOException;
+    boolean addCountryForMovie(int movieId, String countryCode) throws DAOException;
+
+    boolean addParticipantForMovie(int idMovie, int idParticipant, int movieroleId) throws DAOException;
 
     List<Movie> getAllMovies() throws DAOException;
 
@@ -39,16 +42,24 @@ public interface MovieDAO extends DAODefaultFunctional, JDBCAutocloseable {
 
     List<Movie> getNewestMovies() throws DAOException;
 
-    boolean updateMovie(Movie movie) throws DAOException;
+    boolean deleteGenreForMovie(int movieId, int genreId) throws DAOException;
 
-    boolean deleteGenreForMovie(int movieId, String genreName) throws DAOException;
+    boolean deleteCountryForMovie(int movieId, String countryCode) throws DAOException;
 
-    boolean deleteCountryForMovie(int movieId, String countryName) throws DAOException;
-
-    boolean deleteParticipantForMovie(int movieId, String firstName, String lastName)
+    boolean deleteParticipantForMovie(int movieId,int participantId, int movieroleId)
             throws DAOException;
 
     boolean deleteMovie(int idMovie) throws DAOException;
 
     boolean uploadMoviePoster(int idMovie, String imgURL) throws DAOException;
+
+    boolean updateMovie(Movie movie) throws DAOException;
+
+    boolean checkLanguageMovieInfoByCode(int movieId, String languageCode)
+            throws DAOException;
+
+    Movie getLanguageMovieInfoByCode(int movieId, String languageCode) throws DAOException;
+
+    boolean updateLangDependentMovieInfo(Movie movie, String contentLanguage) throws DAOException;
+
 }

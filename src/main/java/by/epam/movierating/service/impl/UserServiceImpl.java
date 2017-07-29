@@ -17,6 +17,7 @@ import java.util.List;
  *         09.05.2017.
  */
 public class UserServiceImpl implements UserService {
+
     @Override
     public User logIn(String login, byte[] password) throws ServiceException {
         //todo validation
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
             if (!user.getPassword().equals(encodedPassword)) {
                 throw new ServiceException("Wrong password");
             }
+            user.setPassword(null);
         } catch (DAOException e) {
             throw new ServiceException("Error during getting user by login", e);
         }
@@ -77,5 +79,59 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("Error during getting All Users", e);
         }
         return userList;
+    }
+
+    @Override
+    public User getUserById(int idUser) throws ServiceException {
+        User user;
+
+        try {
+            DAOFactory daoFactory = DAOFactory.getInstance();
+            UserDAO userDAO = daoFactory.getUserDAO();
+            user = userDAO.getUserById(idUser);
+        } catch (DAOException e) {
+            throw new ServiceException("Error during getting user by Id", e);
+        }
+
+        return user;
+    }
+
+    @Override
+    public boolean updateAdminStatus(int idUser, boolean currentAdminStatus) throws ServiceException {
+        boolean isUpdated;
+        try {
+            DAOFactory daoFactory = DAOFactory.getInstance();
+            UserDAO userDAO = daoFactory.getUserDAO();
+            isUpdated = userDAO.updateAdminStatus(idUser, !currentAdminStatus);
+        } catch (DAOException e) {
+            throw new ServiceException("Error during updating admin status", e);
+        }
+        return isUpdated;
+    }
+
+    @Override
+    public boolean updateBanStatus(int idUser, boolean currentBanStatus) throws ServiceException {
+        boolean isUpdated;
+        try {
+            DAOFactory daoFactory = DAOFactory.getInstance();
+            UserDAO userDAO = daoFactory.getUserDAO();
+            isUpdated = userDAO.updateBanStatus(idUser, !currentBanStatus);
+        } catch (DAOException e) {
+            throw new ServiceException("Error during updating ban status", e);
+        }
+        return isUpdated;
+    }
+
+    @Override
+    public boolean deleteUserById(int idUser) throws ServiceException {
+        boolean isDeleted;
+        try {
+            DAOFactory daoFactory = DAOFactory.getInstance();
+            UserDAO userDAO = daoFactory.getUserDAO();
+            isDeleted = userDAO.deleteUser(idUser);
+        } catch (DAOException e) {
+            throw new ServiceException("Error during delete user by id", e);
+        }
+        return isDeleted;
     }
 }

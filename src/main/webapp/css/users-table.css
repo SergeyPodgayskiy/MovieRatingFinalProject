@@ -1,0 +1,39 @@
+table#users-table > tbody > tr > td#number-column {
+    width: 3%;
+}
+
+table#users-table > tbody > tr > td#avatar-column {
+    width: 5%;
+}
+
+table#users-table > tbody > tr > td#login-column {
+    width: 17%;
+}
+
+table#users-table > tbody > tr > td#full-name-column {
+    width: 18%;
+}
+
+table#users-table > tbody > tr > td#register-date-column {
+    width: 14%;
+}
+
+table#users-table > tbody > tr > td#is-admin-column {
+    width: 9%;
+}
+
+table#users-table > tbody > tr > td#is-banned-column {
+    width: 9%;
+}
+
+table#users-table > tbody > tr > td#deleted-at-column {
+    width: 15%;
+}
+
+table#users-table > tbody > tr > td#delete-button {
+    width: 5%;
+}
+
+#user-id, #ban-status, #admin-status, #admin-id {
+    display: none;
+}

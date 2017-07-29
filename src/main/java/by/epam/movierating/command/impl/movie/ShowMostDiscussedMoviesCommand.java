@@ -4,7 +4,7 @@ import by.epam.movierating.bean.Movie;
 import by.epam.movierating.command.Command;
 import by.epam.movierating.command.constant.AttributeName;
 import by.epam.movierating.command.constant.PageName;
-import by.epam.movierating.command.util.DefineLanguageUtil;
+import by.epam.movierating.command.util.CookieUtil;
 import by.epam.movierating.service.MovieService;
 import by.epam.movierating.service.exception.ServiceException;
 import by.epam.movierating.service.factory.ServiceFactory;
@@ -27,7 +27,7 @@ public class ShowMostDiscussedMoviesCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String currentLanguage = DefineLanguageUtil.getCurrentLanguage(request);
+        String currentLanguage = CookieUtil.getCurrentLanguage(request);
 
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         MovieService movieService = serviceFactory.getMovieService();
@@ -36,7 +36,7 @@ public class ShowMostDiscussedMoviesCommand implements Command {
             request.setAttribute(AttributeName.MOVIES, movieList);
             request.getRequestDispatcher(PageName.MOST_DISCUSSED_MOVIES_PAGE).forward(request, response);
         } catch (ServiceException e) {
-            logger.error(e);
+            logger.error("Error during executing ShowMostDiscussedMoviesCommand",e);
             response.sendRedirect(PageName.ERROR_500_PAGE);
         }
     }

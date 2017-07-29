@@ -1,20 +1,31 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="currentLanguage" value="${cookie.userLanguage.value != null ? cookie.userLanguage.value : sessionScope.defaultLanguage}"/>
-<fmt:setLocale value="${currentLanguage}"/>
+<c:set var="language"
+       value="${cookie.userLanguage.value != null ? cookie.userLanguage.value : sessionScope.defaultLanguage}"/>
+<c:set var="userRole" value="${cookie.role.value != null ? cookie.role.value : sessionScope.role}"/>
+<fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="localization" var="loc"/>
 <div class="nav-side-menu">
     <div class="logo logo-sidebar">
-        <a href="Controller?command=show-welcome-page" <%--class="logo logo-sidebar"--%>>
-            MovieRating
-        </a>
+        <c:choose>
+            <c:when test="${userRole eq 'admin'}">
+                <a href="Controller?command=show-admin-page">
+                    MovieRating
+                </a>
+            </c:when>
+            <c:otherwise>
+                <a href="Controller?command=show-welcome-page">
+                    MovieRating
+                </a>
+            </c:otherwise>
+        </c:choose>
     </div>
     <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
     <div class="user-panel">
         <div class="user-panel-head">
             <c:choose>
-                <c:when test="${sessionScope.user !=null}">
+                <c:when test="${sessionScope.get('user') !=null}">
                     <div class="user-panel-side">
                         <a href="">
                             <i class="fa fa-user fa-lg"></i> ${user.login}
@@ -91,10 +102,12 @@
                                    placeholder="<fmt:message bundle="${loc}" key="password"/>"
                                    name="password" required>
                         </div>
-                        <a class="pull-right forgot-psw" href="#"><fmt:message bundle="${loc}" key="forgot.password"/></a>
+                        <a class="pull-right forgot-psw" href="#"><fmt:message bundle="${loc}"
+                                                                               key="forgot.password"/></a>
                     </div>
                     <input type="hidden" name="previousPageQuery" value="${pageContext.request.queryString}">
-                    <button type="submit" class="btn btn-primary btn-block active btn-new-style "><fmt:message bundle="${loc}" key="sign.in"/></button>
+                    <button type="submit" class="btn btn-primary btn-block active btn-new-style "><fmt:message
+                            bundle="${loc}" key="sign.in"/></button>
                 </form>
             </div>
             <div class="modal-footer">

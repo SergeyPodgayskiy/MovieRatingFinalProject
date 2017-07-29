@@ -1,8 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="currentLanguage" value="${cookie.userLanguage.value != null ? cookie.userLanguage.value : sessionScope.defaultLanguage}"/>
-<fmt:setLocale value="${currentLanguage}"/>
+<c:set var="language" value="${cookie.userLanguage.value != null ? cookie.userLanguage.value : sessionScope.defaultLanguage}"/>
+<c:set var="userRole" value="${cookie.role.value != null ? cookie.role.value : sessionScope.role}"/>
+<fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="localization" var="loc"/>
 
 <nav class="<%--navbar navbar-inverse--%> new-style-navbar">
@@ -21,7 +22,7 @@
         </div>
         <div class="col-md-1 col-md-offset-2 col-xs-4 col-xs-offset-0 text-center">
             <div id="language-wrapper">
-                <c:if test="${currentLanguage eq 'ru_RU'}">
+                <c:if test="${language eq 'ru_RU'}">
                     <a id="selected-language" href="Controller?command=change-language&userLanguage=ru_RU
                 &previousPageQuery=${pageContext.request.queryString}">
                         <fmt:message bundle="${loc}" key="rus"/>
@@ -33,7 +34,7 @@
                     </a>
                 </c:if>
 
-                <c:if test="${currentLanguage eq 'en_EN' or currentLanguage == null}">
+                <c:if test="${language eq 'en_EN' or language == null}">
                     <a href="Controller?command=change-language&userLanguage=ru_RU&previousPageQuery=${pageContext.request.queryString}">
                         <fmt:message bundle="${loc}" key="rus"/></a>
                     |

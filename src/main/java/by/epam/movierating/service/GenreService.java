@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface GenreService {
     List<Genre> getGenresByMovieId(int idMovie, String language) throws ServiceException;
+
+    List<Genre> getAllGenres(String language) throws ServiceException;
 }

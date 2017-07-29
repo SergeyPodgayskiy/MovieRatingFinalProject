@@ -5,7 +5,7 @@ import by.epam.movierating.command.Command;
 import by.epam.movierating.command.constant.AttributeName;
 import by.epam.movierating.command.constant.PageName;
 import by.epam.movierating.command.constant.ParameterName;
-import by.epam.movierating.command.util.DefineLanguageUtil;
+import by.epam.movierating.command.util.CookieUtil;
 import by.epam.movierating.service.*;
 import by.epam.movierating.service.exception.ServiceException;
 import by.epam.movierating.service.factory.ServiceFactory;
@@ -29,7 +29,7 @@ public class ShowMoviePageCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String currentLanguage = DefineLanguageUtil.getCurrentLanguage(request);
+        String currentLanguage = CookieUtil.getCurrentLanguage(request);
         HttpSession session = request.getSession(); //todo replace it
         int movieId = Integer.parseInt(request.getParameter(ParameterName.MOVIE_ID));
 
@@ -48,7 +48,7 @@ public class ShowMoviePageCommand implements Command {
             request.setAttribute(AttributeName.COUNTRIES, countryList);
             List<Genre> genreList = genreService.getGenresByMovieId(movieId,currentLanguage);
             request.setAttribute(AttributeName.GENRES, genreList);
-            Map<MovieParticipant, List<ParticipantMovieRole>> movieParticipantMap
+            Map<MovieParticipant, List<MovieRole>> movieParticipantMap
                     = movieParticipantService.getMovieParticipantsByMovieId(movieId,currentLanguage);
             request.setAttribute(AttributeName.PARTICIPANTS, movieParticipantMap);
             if (session.getAttribute(AttributeName.USER_ID) != null) {
@@ -60,7 +60,7 @@ public class ShowMoviePageCommand implements Command {
             }
             request.getRequestDispatcher(PageName.MOVIE_INFO_PAGE).forward(request, response);
         } catch (ServiceException e) {
-            logger.error(e);
+            logger.error("Error during executing ShowMoviePageCommand", e);
             response.sendRedirect(PageName.ERROR_500_PAGE);
         }
     }

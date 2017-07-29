@@ -21,6 +21,7 @@ import java.util.Map;
 public final class RoleAndCommandsParserUtil {
     private static final Logger logger = Logger.getLogger(RoleAndCommandsParserUtil.class);
     private static final RoleAndCommandsParserUtil INSTANCE = new RoleAndCommandsParserUtil();
+
     private static final String ROLES_RIGHTS_XML_PATH = "/rolesAndRights.xml";
     private static final String COMMAND = "command";
 

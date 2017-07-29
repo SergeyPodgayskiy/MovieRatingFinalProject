@@ -14,6 +14,7 @@ import java.util.List;
  *         30.06.2017.
  */
 public class CountryServiceImpl implements CountryService {
+
     @Override
     public List<Country> getCountriesByMovieId(int idMovie, String language) throws ServiceException {
         List<Country> countryList;
@@ -22,7 +23,20 @@ public class CountryServiceImpl implements CountryService {
             CountryDAO countryDAO = daoFactory.getCountryDAO();
             countryList = countryDAO.getCountriesByMovieId(idMovie, language);
         } catch (DAOException e) {
-            throw new ServiceException("Error during getting countries by movieId",e);
+            throw new ServiceException("Error during getting countries by movieId", e);
+        }
+        return countryList;
+    }
+
+    @Override
+    public List<Country> getAllCountries(String language) throws ServiceException {
+        List<Country> countryList;
+        try {
+            DAOFactory daoFactory = DAOFactory.getInstance();
+            CountryDAO countryDAO = daoFactory.getCountryDAO();
+            countryList = countryDAO.getAllCountries(language);
+        } catch (DAOException e) {
+            throw new ServiceException("Error during getting all countries", e);
         }
         return countryList;
     }

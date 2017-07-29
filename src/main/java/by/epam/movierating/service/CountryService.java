@@ -10,5 +10,8 @@ import java.util.List;
  *         30.06.2017.
  */
 public interface CountryService {
-   List<Country> getCountriesByMovieId(int idMovie, String language) throws ServiceException;
+    List<Country> getCountriesByMovieId(int idMovie, String language) throws ServiceException;
+
+    List<Country> getAllCountries(String language) throws ServiceException;
+
 }

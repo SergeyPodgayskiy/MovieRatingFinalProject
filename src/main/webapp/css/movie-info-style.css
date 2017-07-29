@@ -1,6 +1,6 @@
 .movie-poster {
     /*box-shadow: 0 0 1px rgb(156, 138, 138);*/
-    box-shadow:  0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8
+    box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8
 }
 
 .poster-side {
@@ -22,15 +22,17 @@
 .movie-table > tbody > tr > td:first-child {
     width: 43%;
 }
+
 .movie-table > tbody > tr:last-child:not(.table-footer) > td {
     border-bottom: 1px solid #ddd;;
 }
 
-.movie-status-side{
+.movie-status-side {
     margin-top: 40px;
     padding-right: 10%;
 }
-.movie-status-side  span {
+
+.movie-status-side span {
     padding: 0 3% 0 3%;
 }
 
@@ -46,8 +48,14 @@
 .movie-input-wrapper {
     padding-left: 21px;
 }
-#movie-id{
+
+#movie-id, #user-id {
     display: none;
 }
 
+#message{
+    /*position: fixed;*/
+    z-index: 1;
+    width: 100%;
+}
 

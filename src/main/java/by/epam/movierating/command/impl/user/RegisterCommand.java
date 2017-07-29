@@ -12,9 +12,9 @@ import by.epam.movierating.service.factory.ServiceFactory;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -35,11 +35,15 @@ public class RegisterCommand implements Command {
 
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         UserService userService = serviceFactory.getUserService();
-        HttpSession session = request.getSession();
         try {
             User user = userService.register(login, password, confirmedPassword, fullName, email);
-            session.setAttribute(AttributeName.USER, user);
-            response.sendRedirect(PrevPageQueryUtil.getPrevPageQuery(request));
+            if (user != null) {
+                Cookie roleCookie = new Cookie(AttributeName.ROLE, AttributeName.USER);
+                Cookie userIdCookie = new Cookie(AttributeName.USER_ID, String.valueOf(user.getId()));
+                response.addCookie(userIdCookie);
+                response.addCookie(roleCookie);
+                response.sendRedirect(PrevPageQueryUtil.getPrevPageQuery(request));
+            }
         } catch (ServiceException e) {
             logger.error(e);
             response.sendRedirect(PageName.ERROR_500_PAGE);

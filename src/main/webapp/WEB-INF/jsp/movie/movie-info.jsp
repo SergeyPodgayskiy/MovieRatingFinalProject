@@ -53,17 +53,17 @@
                         <div class="col-sm-12 content-header">
                             <h1>
                                 ${movie.title}
-                                    <c:if test="${userRole eq 'admin'}">
-                                        <a href="Controller?command=show-edit-movie-page&movieId=${movie.id}&previousPageQuery=${pageContext.request.queryString}"
-                                            class="btn btn-default edit-movie" href="#">
-                                            <i class="fa fa-pencil fa-lg"></i>
-                                            <fmt:message bundle="${loc}" key="edit"/>
-                                        </a>
-                                        <a class="btn btn-danger delete-movie" >
-                                            <i class="fa fa-times fa-lg"></i>
-                                            <fmt:message bundle="${loc}" key="delete"/>
-                                        </a>
-                                    </c:if>
+                                <c:if test="${userRole eq 'admin'}">
+                                    <a href="Controller?command=show-edit-movie-page&movieId=${movie.id}"
+                                       class="btn btn-default edit-movie" href="#">
+                                        <i class="fa fa-pencil fa-lg"></i>
+                                        <fmt:message bundle="${loc}" key="edit"/>
+                                    </a>
+                                    <a class="btn btn-danger delete-movie">
+                                        <i class="fa fa-times fa-lg"></i>
+                                        <fmt:message bundle="${loc}" key="delete"/>
+                                    </a>
+                                </c:if>
                             </h1>
                         </div>
                     </div>
@@ -125,7 +125,7 @@
                                             <c:forEach var="participant" items="${requestScope.participants}"
                                                        varStatus="rank">
                                                 <c:forEach items="${participant.value}" var="role" varStatus="loop">
-                                                    <c:if test="${role.name eq 'director'}">
+                                                    <c:if test="${role.name eq 'director' or role.name eq 'режиссер'}">
                                                         ${participant.key.name}
                                                         ${participant.key.surname}
                                                     </c:if>
@@ -139,9 +139,11 @@
                                             <c:forEach var="participant" items="${requestScope.participants}"
                                                        varStatus="rank">
                                                 <c:forEach items="${participant.value}" var="role" varStatus="loop">
-                                                    <c:if test="${role.name eq 'writer'}">
+                                                    <c:if test="${role.name eq 'writer' or role.name eq 'сценарист'}">
+
                                                         ${participant.key.name}
                                                         ${participant.key.surname}
+
                                                     </c:if>
                                                 </c:forEach>
                                             </c:forEach>
@@ -194,7 +196,7 @@
                                     <c:forEach var="participant" items="${requestScope.participants}"
                                                varStatus="rank">
                                         <c:forEach items="${participant.value}" var="role" varStatus="loop">
-                                            <c:if test="${role.name eq 'actor'}">
+                                            <c:if test="${role.name eq 'actor' or role.name eq 'актер'}">
                                                 <tr>
                                                     <td>
                                                         <a href="#">
@@ -203,7 +205,7 @@
                                                         </a>
                                                     </td>
                                                     <td>
-                                                        <a href="#">
+                                                        <a href="Controller?command=show-participant-page&participantId=${participant.key.id}">
                                                                 ${participant.key.name}
                                                                 ${participant.key.surname}
                                                         </a>

@@ -19,7 +19,7 @@ public interface CountryDAO extends DAODefaultFunctional, JDBCAutocloseable, Col
 
     List<Country> getCountriesByMovieId(int idMovie, String language) throws DAOException;
 
-    Country getCountryByCode(String countryCode) throws DAOException;
+    Country getCountryByCode(String countryCode, String language) throws DAOException;
 
     boolean updateCountry(Country country) throws DAOException;
 

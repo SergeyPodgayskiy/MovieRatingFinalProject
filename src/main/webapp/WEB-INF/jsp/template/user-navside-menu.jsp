@@ -68,8 +68,8 @@
                 </a>
             </li>
             <li data-toggle="collapse" data-target="#new" class="collapsed">
-                <a href="#"><i class="fa  fa-male fa-fw"></i>
-                    <fmt:message bundle="${loc}" key="actors"/> <%--<span class="arrow"></span>--%></a>
+                <a href="Controller?command=show-all-actors"><i class="fa  fa-male fa-fw"></i>
+                    <fmt:message bundle="${loc}" key="participants"/> <%--<span class="arrow"></span>--%></a>
             </li>
         </ul>
         <div class="language">

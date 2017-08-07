@@ -33,16 +33,16 @@ public class CountryDAOImpl implements CountryDAO {
             "SELECT country.code, country_localization.name, country.deleted_at FROM country" +
                     " JOIN country_localization" +
                     " ON country.code = country_localization.country_code" +
-                    " AND country_localization.language_code = ?" + //todo current lang
+                    " AND country_localization.language_code = ?" +
                     " WHERE deleted_at IS NOT NULL" +
                     " ORDER BY country_localization.name";
     private static final String SQL_GET_COUNTRY_BY_CODE =
-            "SELECT country.code, country_localization.name FROM country" +
+            "SELECT country.*, country_localization.name" +
+                    " FROM country" +
                     " JOIN country_localization" +
                     " ON country.code = country_localization.country_code" +
                     " AND country_localization.language_code = ?" +
-                    " WHERE code = ?" +
-                    " AND deleted_at IS NULL";
+                    " WHERE code = ?";
     private static final String SQL_GET_ALL_COUNTRIES_BY_CODE = //todo rename
             "SELECT country.code, country_localization.name FROM country" +
                     " JOIN country_localization" +
@@ -147,22 +147,25 @@ public class CountryDAOImpl implements CountryDAO {
     }
 
     @Override
-    public Country getCountryByCode(String countryCode) throws DAOException {
-        Connection connection;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
+    public Country getCountryByCode(String countryCode, String language) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         Country country = null;
         try {
             ConnectionPool connectionPool = ConnectionPool.getInstance();
             connection = connectionPool.getConnection();
             preparedStatement = connection.prepareStatement(SQL_GET_COUNTRY_BY_CODE);
-            preparedStatement.setString(1, countryCode);
+            preparedStatement.setString(1, language);
+            preparedStatement.setString(2, countryCode);
             resultSet = preparedStatement.executeQuery();
             country = setDataForOneCountry(resultSet);
         } catch (ConnectionPoolException e) {
             throw new DAOException("Can not get a connection from pool", e);
         } catch (SQLException e) {
             throw new DAOException("Error during SQL_GET_COUNTRY_BY_CODE query", e);
+        } finally {
+            close(connection, preparedStatement, resultSet);
         }
         return country;
     }

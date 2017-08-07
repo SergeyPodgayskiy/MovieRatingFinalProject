@@ -63,7 +63,6 @@
                                                 <fmt:message bundle="${loc}" key="add.movie.page"/>
                                             </a>
                                         </li>
-                                        </li>
                                     </c:if>
                                     <li class="active">
                                         <a href="Controller?command=show-top-movies" role="tab">

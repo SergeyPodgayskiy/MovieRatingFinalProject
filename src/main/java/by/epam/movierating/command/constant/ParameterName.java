@@ -40,8 +40,14 @@ public final class ParameterName {
     public static final String ADMIN_STATUS = "adminStatus";
     public static final String BAN_STATUS = "banStatus";
     public static final String ADD_MOVIE_PAGE = "addMoviePage";
+    public static final String ADD_GENRE_PAGE = "addGenrePage";
     public static final String ROLE_ID = "roleId";
 
+    //participant parameters
+    public static final String ADD_PARTICIPANT_PAGE = "addParticipantPage";
+    public static final String BIRTHDATE = "birthdate";
+    public static final String NAME = "name";
+    public static final String SURNAME = "surname";
 
-
+    public static final String CURRENT_PAGE_NUMBER = "curPageNumber";
 }

@@ -10,6 +10,8 @@
         <command>show-most-discussed-movies</command>
         <command>show-movie-page</command>
         <command>check-rate-opportunity</command>
+        <command>show-participant-page</command>
+        <command>show-all-actors</command>
     </guest>
     <user>
         <command>show-welcome-page</command>
@@ -24,6 +26,8 @@
         <command>update-movie-rating</command>
         <command>delete-movie-rating</command>
         <command>check-rate-opportunity</command>
+        <command>show-participant-page</command>
+        <command>show-all-actors</command>
     </user>
     <admin>
         <command>show-welcome-page</command>
@@ -50,21 +54,40 @@
         <command>create-movie</command>
         <command>add-country-for-movie</command>
         <command>delete-country-for-movie</command>
-        <command>add-language-dependent-movie-info</command>
+        <command>add-localized-movie-info</command>
         <command>add-participant-for-movie</command>
         <command>delete-participant-for-movie</command>
         <command>get-all-genres</command>
         <command>add-genre-for-movie</command>
         <command>delete-genre-for-movie</command>
         <command>update-movie</command>
-        <command>check-language-movie-info-by-code</command>
-        <command>get-language-movie-info-by-code</command>
-        <command>update-language-dependent-movie-info</command>
+        <command>check-localized-movie-info</command>
+        <command>get-localized-movie-info</command>
+        <command>update-localized-movie-info</command>
         <command>delete-movie</command>
         <command>show-edit-movie-page</command>
         <command>get-neutral-movie-information</command>
         <command>get-participants-in-movie</command>
         <command>get-genres-in-movie</command>
         <command>get-countries-in-movie</command>
+        <command>create-participant</command>
+        <command>update-participant</command>
+        <command>check-localized-participant-info</command>
+        <command>get-localized-participant-info</command>
+        <command>add-localized-participant-info</command>
+        <command>update-localized-participant-info</command>
+        <command>add-country-for-participant</command>
+        <command>add-role-for-participant</command>
+        <command>delete-role-for-participant</command>
+        <command>create-genre</command>
+        <command>add-localized-genre-info</command>
+        <command>update-localized-genre-info</command>
+        <command>delete-genre</command>
+        <command>check-localized-genre-info-by-code</command>
+        <command>get-localized-genre-info-by-code</command>
+        <command>show-participant-page</command>
+        <command>show-edit-participant-page</command>
+        <command>get-participant-roles</command>
+        <command>show-all-actors</command>
     </admin>
 </roles>

@@ -24,9 +24,9 @@ public interface MovieService {
 
     boolean deleteCountryForMovie(int movieId, String countryCode) throws ServiceException;
 
-    boolean addLanguageDependentMovieInfo(int movieId, String contentLanguage,
-                                          String movieName,
-                                          String description, String slogan) throws ServiceException;
+    boolean addLocalizedMovieInfo(int movieId, String contentLanguage,
+                                  String movieName,
+                                  String description, String slogan) throws ServiceException;
 
     boolean addParticipantForMovie(int movieId, int participantId, int movieroleId)
             throws ServiceException;
@@ -43,15 +43,15 @@ public interface MovieService {
     boolean updateMovie(int movieId, int releaseYear, String ageLimit, Time duration)
             throws ServiceException;
 
-    boolean checkLanguageMovieInfoByCode(int movieId, String languageCode) throws ServiceException;
+    boolean checkLocalizedMovieInfo(int movieId, String languageCode) throws ServiceException;
 
-    Movie getLanguageMovieInfoByCode(int movieId, String languageCode) throws ServiceException;
+    Movie getLocalizedMovieInfo(int movieId, String languageCode) throws ServiceException;
 
-    boolean updateLangDependentMovieInfo(int movieId,
-                                         String contentLanguage,
-                                         String movieName,
-                                         String description,
-                                         String slogan) throws ServiceException;
+    boolean updateLocalizedMovieInfo(int movieId,
+                                     String contentLanguage,
+                                     String movieName,
+                                     String description,
+                                     String slogan) throws ServiceException;
 
     boolean deleteMovieById(int movieId) throws ServiceException;
 }

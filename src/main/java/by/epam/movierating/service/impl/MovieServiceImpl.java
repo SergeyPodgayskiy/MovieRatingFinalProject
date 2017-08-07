@@ -127,11 +127,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public boolean addLanguageDependentMovieInfo(int movieId,
-                                                 String contentLanguage,
-                                                 String movieName,
-                                                 String description,
-                                                 String slogan) throws ServiceException {
+    public boolean addLocalizedMovieInfo(int movieId,
+                                         String contentLanguage,
+                                         String movieName,
+                                         String description,
+                                         String slogan) throws ServiceException {
 
         boolean isAdded;
         try {
@@ -142,7 +142,7 @@ public class MovieServiceImpl implements MovieService {
             movie.setTitle(movieName);
             movie.setDescription(description);
             movie.setSlogan(slogan);
-            isAdded = movieDAO.addLanguageDependentMovieInfo(movie, contentLanguage);
+            isAdded = movieDAO.addLocalizedMovieInfo(movie, contentLanguage);
         } catch (DAOException e) {
             throw new ServiceException("Error during adding language dependent movie info", e);
         }
@@ -220,13 +220,13 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public boolean checkLanguageMovieInfoByCode(int movieId, String languageCode)
+    public boolean checkLocalizedMovieInfo(int movieId, String languageCode)
             throws ServiceException {
         boolean isExist;
         try {
             DAOFactory daoFactory = DAOFactory.getInstance();
             MovieDAO movieDAO = daoFactory.getMovieDAO();
-            isExist = movieDAO.checkLanguageMovieInfoByCode(movieId, languageCode);
+            isExist = movieDAO.checkLocalizedMovieInfo(movieId, languageCode);
         } catch (DAOException e) {
             throw new ServiceException("Error during checking info for movie", e);
         }
@@ -234,14 +234,14 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie getLanguageMovieInfoByCode(int movieId, String languageCode)
+    public Movie getLocalizedMovieInfo(int movieId, String languageCode)
             throws ServiceException {
 
         Movie movie;
         try {
             DAOFactory daoFactory = DAOFactory.getInstance();
             MovieDAO movieDAO = daoFactory.getMovieDAO();
-            movie = movieDAO.getLanguageMovieInfoByCode(movieId, languageCode);
+            movie = movieDAO.getLocalizedMovieInfo(movieId, languageCode);
         } catch (DAOException e) {
             throw new ServiceException("Error during getting language movie info by code", e);
         }
@@ -249,11 +249,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public boolean updateLangDependentMovieInfo(int movieId,
-                                                String contentLanguage,
-                                                String movieName,
-                                                String description,
-                                                String slogan) throws ServiceException {
+    public boolean updateLocalizedMovieInfo(int movieId,
+                                            String contentLanguage,
+                                            String movieName,
+                                            String description,
+                                            String slogan) throws ServiceException {
         boolean isUpdated;
         try {
             DAOFactory daoFactory = DAOFactory.getInstance();
@@ -263,7 +263,7 @@ public class MovieServiceImpl implements MovieService {
             movie.setTitle(movieName);
             movie.setDescription(description);
             movie.setSlogan(slogan);
-            isUpdated = movieDAO.updateLangDependentMovieInfo(movie, contentLanguage);
+            isUpdated = movieDAO.updateLocalizedMovieInfo(movie, contentLanguage);
         } catch (DAOException e) {
             throw new ServiceException("Error during updating lang dependent movie info", e);
         }

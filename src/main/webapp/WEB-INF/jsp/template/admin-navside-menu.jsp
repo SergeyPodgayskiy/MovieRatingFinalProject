@@ -67,8 +67,13 @@
                     <fmt:message bundle="${loc}" key="movies"/> <%--<span class="arrow"></span>--%>
                 </a>
             </li>
+            <li data-toggle="collapse" data-target="#new" class="collapsed">
+                <a href="Controller?command=redirect&redirectPage=addParticipantPage&previousPageQuery=${pageContext.request.queryString}">
+                    <i class="fa  fa-male fa-fw"></i>
+                    <fmt:message bundle="${loc}" key="participants"/> <%--<span class="arrow"></span>--%></a>
+            </li>
             <li data-toggle="collapse" data-target="#service" class="collapsed target">
-                <a href="#"><i class="fa fa-language fa-lg"></i>
+                <a href="Controller?command=redirect&redirectPage=addGenrePage&previousPageQuery=${pageContext.request.queryString}"><i class="fa fa-language fa-lg"></i>
                     <fmt:message bundle="${loc}" key="genres"/>
                     <%--<span class="arrow"></span>--%>
                 </a>
@@ -80,13 +85,7 @@
             <%--</ul>--%>
 
 
-            <li data-toggle="collapse" data-target="#new" class="collapsed">
-                <a href="#"><i class="fa  fa-male fa-fw"></i>
-                    <fmt:message bundle="${loc}" key="actors"/> <%--<span class="arrow"></span>--%></a>
-            </li>
         </ul>
-        <div class="language">
-        </div>
     </div>
 </div>
 <%--login modal--%>

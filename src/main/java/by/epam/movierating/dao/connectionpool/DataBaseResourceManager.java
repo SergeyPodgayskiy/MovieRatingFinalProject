@@ -7,8 +7,8 @@ import java.util.ResourceBundle;
  *         09.05.2017.
  */
 public final class DataBaseResourceManager {
-    private static final DataBaseResourceManager INSTANCE = new DataBaseResourceManager();
     private ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
+    private static final DataBaseResourceManager INSTANCE = new DataBaseResourceManager();
 
     private DataBaseResourceManager(){}
 

@@ -14,14 +14,6 @@ public interface DAODefaultFunctional {
         return new java.sql.Date(date.getTime());
     }
 
-  /*  default java.sql.Date getYearFromJavaDate(java.util.Date date) {
-        LocalDate localDate = date.to
-    }*/
-
-    /*default java.sql.Timestamp convertJavaDateToSqlFullDate(java.util.Date date) {
-        return new java.sql.Timestamp(date.getTime());
-    }*/
-
     default int returnGeneratedId(PreparedStatement preparedStatement)
             throws SQLException {
         int generatedId = -1;

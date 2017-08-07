@@ -14,4 +14,5 @@ public interface CountryService {
 
     List<Country> getAllCountries(String language) throws ServiceException;
 
+    Country getCountryByCode(String countryCode, String currentLanguage) throws ServiceException;
 }

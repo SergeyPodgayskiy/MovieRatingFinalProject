@@ -23,4 +23,8 @@ public final class PageName {
 
     public static final String USERS_PAGE = "WEB-INF/jsp/admin/users.jsp";
     public static final String ADD_AND_EDIT_MOVIE_PAGE = "WEB-INF/jsp/admin/add-and-edit-movie.jsp";
+    public static final String ADD_AND_EDIT_PARTICIPANT_PAGE = "WEB-INF/jsp/admin/add-and-edit-participant.jsp";
+    public static final String ADD_AND_EDIT_GENRE_PAGE = "WEB-INF/jsp/admin/add-and-edit-genre.jsp";
+    public static final String PARTICIPANT_INFO_PAGE = "WEB-INF/jsp/participant/participant-info.jsp";
+    public static final String ACTORS_PAGE = "WEB-INF/jsp/participant/actors.jsp";
 }

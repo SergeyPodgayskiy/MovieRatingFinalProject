@@ -10,6 +10,7 @@ public class Genre implements Serializable {
     private static final long serialVersionUID = 1L;
     private int id;
     private String name;
+    private String description;
 
     public Genre() {
     }
@@ -30,6 +31,14 @@ public class Genre implements Serializable {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -47,6 +56,9 @@ public class Genre implements Serializable {
         if (id != genre.id) {
             return false;
         }
+        if (description != null ? !description.equals(genre.description) : genre.description != null) {
+            return false;
+        }
         return name != null ? name.equals(genre.name) : genre.name == null;
     }
 
@@ -54,6 +66,7 @@ public class Genre implements Serializable {
     public int hashCode() {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 
@@ -62,6 +75,7 @@ public class Genre implements Serializable {
         return "Genre{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

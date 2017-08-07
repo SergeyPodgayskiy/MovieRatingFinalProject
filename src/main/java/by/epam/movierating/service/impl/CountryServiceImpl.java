@@ -40,4 +40,18 @@ public class CountryServiceImpl implements CountryService {
         }
         return countryList;
     }
+
+    @Override
+    public Country getCountryByCode(String countryCode, String currentLanguage)
+            throws ServiceException {
+        Country country;
+        try {
+            DAOFactory daoFactory = DAOFactory.getInstance();
+            CountryDAO countryDAO = daoFactory.getCountryDAO();
+            country = countryDAO.getCountryByCode(countryCode, currentLanguage);
+        } catch (DAOException e) {
+            throw new ServiceException("Error during getting country by code", e);
+        }
+        return country;
+    }
 }

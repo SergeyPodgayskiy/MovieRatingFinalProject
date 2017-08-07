@@ -29,4 +29,18 @@ public class MovieRoleServiceImpl implements MovieRoleService {
         }
         return movieRoles;
     }
+
+    @Override
+    public List<MovieRole> getMovieRolesByParticipantId(int participantId, String currentLanguage)
+            throws ServiceException {
+        List<MovieRole> movieRoles;
+        try {
+            DAOFactory daoFactory = DAOFactory.getInstance();
+            MovieRoleDAO movieRoleDAO = daoFactory.getMovieRoleDAO();
+            movieRoles = movieRoleDAO.getMovieRolesByParticipantId(participantId, currentLanguage);
+        } catch (DAOException e) {
+            throw new ServiceException("Error during getting all movie roles", e);
+        }
+        return movieRoles;
+    }
 }

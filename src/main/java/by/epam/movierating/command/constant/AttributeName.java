@@ -50,4 +50,9 @@ public final class AttributeName {
     public static final String ADMIN_STATUS = "adminStatus";
     public static final String BAN_STATUS = "banStatus";
     public static final String IS_DELETED = "isDeleted";
+    public static final String PARTICIPANT = "participant";
+    public static final String COUNTRY = "country";
+    public static final String PARTICIPANT_MOVIE_ROLES = "movieRoles";
+    public static final String PARTICIPANT_ID = "participantId";
+    public static final String CURRENT_PAGE_NUMBER = "curPageNumber";
 }

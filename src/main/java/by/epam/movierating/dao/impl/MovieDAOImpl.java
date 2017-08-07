@@ -36,7 +36,7 @@ public class MovieDAOImpl implements MovieDAO {
                     "JOIN movie_localization AS m_loc ON movie.id = m_loc.id_movie " +
                     "AND m_loc.language_code = ? " +
                     "WHERE movie.deleted_at IS NULL " +
-                    "GROUP BY movie.id " +
+                    "GROUP BY movie.id " + //todo delete group by
                     "ORDER BY movie.rating DESC;";
     private static final String SQL_DELETE_MOVIE = "UPDATE movie SET deleted_at = ? WHERE id = ?";
     private static final String SQL_GET_NEWEST_MOVIES =
@@ -80,11 +80,22 @@ public class MovieDAOImpl implements MovieDAO {
                     " FROM movie" +
                     " INNER JOIN movie_localization AS m_loc" +
                     " ON movie.id = m_loc.id_movie " +
-                    " WHERE id_movie = ? AND language_code = ?";
+                    " WHERE id_movie = ? AND language_code = ? AND movie.deleted_at IS NULL";
     private static final String SQL_UPDATE_LANG_DEPENDENT_MOVIE_INFO =
             " UPDATE movie_localization SET title = ?, description = ?, slogan = ?" +
                     " WHERE id_movie = ? AND language_code = ?";
-
+    private static final String SQL_GET_MOVIES_BY_PARTICIPANT_ID =
+            " SELECT movie.*, m_loc.title, m_loc.description,m_loc.slogan" +
+                    " FROM movie INNER JOIN movie_localization AS m_loc" +
+                    " ON movie.id = m_loc.id_movie " +
+                    " AND language_code = ? " +
+                    " INNER JOIN movie_participant" +
+                    " ON movie.id = movie_participant.id_movie " +
+                    " WHERE movie_participant.id_participant = ? AND movie.deleted_at IS NULL" +
+                    " GROUP BY movie.id" +
+                    " ORDER BY movie.rating DESC" +
+                    " LIMIT ?";
+    private static final int LIMIT_MOVIE_COUNT = 5;
 
     @Override
     public int addMovie(Movie movie) throws DAOException {
@@ -144,7 +155,7 @@ public class MovieDAOImpl implements MovieDAO {
     }
 
     @Override
-    public boolean addLanguageDependentMovieInfo(Movie movie, String contentLanguage)
+    public boolean addLocalizedMovieInfo(Movie movie, String contentLanguage)
             throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -494,7 +505,7 @@ public class MovieDAOImpl implements MovieDAO {
     }
 
     @Override
-    public boolean checkLanguageMovieInfoByCode(int movieId, String languageCode)
+    public boolean checkLocalizedMovieInfo(int movieId, String languageCode)
             throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -519,7 +530,7 @@ public class MovieDAOImpl implements MovieDAO {
     }
 
     @Override
-    public Movie getLanguageMovieInfoByCode(int movieId, String languageCode)
+    public Movie getLocalizedMovieInfo(int movieId, String languageCode)
             throws DAOException {
 
         Connection connection = null;
@@ -545,7 +556,7 @@ public class MovieDAOImpl implements MovieDAO {
     }
 
     @Override
-    public boolean updateLangDependentMovieInfo(Movie movie, String contentLanguage) throws DAOException {
+    public boolean updateLocalizedMovieInfo(Movie movie, String contentLanguage) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         boolean isUpdated;
@@ -568,6 +579,32 @@ public class MovieDAOImpl implements MovieDAO {
             close(connection, preparedStatement);
         }
         return isUpdated;
+    }
+
+    @Override
+    public List<Movie> getMoviesByParticipantId(int idParticipant, String currentLanguage)
+            throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<Movie> movieList;
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+            connection = connectionPool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_GET_MOVIES_BY_PARTICIPANT_ID);
+            preparedStatement.setString(1, currentLanguage);
+            preparedStatement.setInt(2, idParticipant);
+            preparedStatement.setInt(3, LIMIT_MOVIE_COUNT);
+            resultSet = preparedStatement.executeQuery();
+            movieList = setDataForMovies(resultSet);
+        } catch (ConnectionPoolException e) {
+            throw new DAOException("Can not get a connection", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error during SQL_GET_MOST_DISCUSSED_MOVIES query", e);
+        } finally {
+            close(connection, preparedStatement, resultSet);
+        }
+        return movieList;
     }
 
     private Movie setDataForOneMovie(ResultSet resultSet) throws SQLException {

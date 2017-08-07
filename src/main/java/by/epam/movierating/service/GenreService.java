@@ -13,4 +13,18 @@ public interface GenreService {
     List<Genre> getGenresByMovieId(int idMovie, String language) throws ServiceException;
 
     List<Genre> getAllGenres(String language) throws ServiceException;
+
+    int addGenre(String name, String description, String contentLanguage) throws ServiceException;
+
+    boolean addLocalizedGenreInfo(int genreId, String name, String description, String contentLanguage)
+            throws ServiceException;
+
+    boolean updateLocalizedGenreInfo(int genreId, String name, String description, String contentLanguage)
+            throws ServiceException;
+
+    boolean deleteGenreById(int genreId) throws ServiceException;
+
+    boolean checkLocalizedGenreInfoByCode(int genreId, String languageCode) throws ServiceException;
+
+    Genre getLocalizedGenreInfoByCode(int genreId, String languageCode) throws ServiceException;
 }

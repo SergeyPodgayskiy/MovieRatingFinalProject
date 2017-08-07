@@ -244,7 +244,7 @@ $(document).ready(function () {
             data: {
                 movieId: movieId,
                 contentLanguage: languageCode,
-                command: 'check-language-movie-info-by-code'
+                command: 'check-localized-movie-info'
             },
             success: function (isExist) {
                 if (isExist) {
@@ -255,7 +255,7 @@ $(document).ready(function () {
                         data: {
                             movieId: movieId,
                             contentLanguage: languageCode,
-                            command: 'get-language-movie-info-by-code'
+                            command: 'get-localized-movie-info'
                         },
                         success: function (data) {
                             console.log(data);
@@ -292,7 +292,7 @@ $(document).ready(function () {
             type: 'POST',
             url: $url,
             data: {
-                command: 'add-language-dependent-movie-info',
+                command: 'add-localized-movie-info',
                 movieName: name,
                 slogan: slogan,
                 description: description,
@@ -345,7 +345,7 @@ $(document).ready(function () {
             type: 'POST',
             url: $url,
             data: {
-                command: 'update-language-dependent-movie-info',
+                command: 'update-localized-movie-info',
                 movieName: name,
                 slogan: slogan,
                 description: description,
@@ -802,7 +802,7 @@ $(document).ready(function () {
         });
     })();
 
-    function checkLanguageMovieInfo() {
+    /*function checkLanguageMovieInfo() {
         var languageCode = e.params.data.id;
         $.ajax({
             type: 'POST',
@@ -811,66 +811,12 @@ $(document).ready(function () {
             data: {
                 movieId: movieId,
                 contentLanguage: languageCode,
-                command: 'check-language-movie-info-by-code'
+                command: 'check-localized-info-by-code'
             },
             success: function (data) {
                 return data;
             }
         });
-    }
-
-
-    /*function initActorsList(values) {
-     var selected = [];
-     var initials = [];
-
-     for (var s in values) {
-     initials.push({id: s, name: values[s].name + values[s].surname});
-     selected.push(s);
-     }
-
-     $('#actors').select2({
-     data: initials,
-     /!* ajax: {
-     type: 'GET',
-     url: $url,
-     dataType: 'json',
-     delay: 250,
-
-     data: function (params) {
-     return {
-     term: params.term,
-     page: params.page || 1,
-     };
-     },
-     command: 'get-all-actors',
-     processResults: function (data, params) {
-     params.page = params.page || 1;
-
-     return {
-     results: data.items,
-     pagination: {
-     more: (params.page * 30) < data.total_count
-     }
-     };
-     },
-     cache: true
-     },*!/
-     minimumInputLength: 1,
-     tokenSeparators: [",", " "],
-     placeholder: "Select none, one or many values",
-     templateResult: function (item) {
-     return item.name;
-     },
-     templateSelection: function (item) {
-     return item.name;
-     },
-     matcher: function (term, text) {
-     return text.name.toUpperCase().indexOf(term.toUpperCase()) != -1;
-     },
-     });
-
-     $('#actors').val(selected).trigger('change');
-     }*/
+    }*/
 })
 ;

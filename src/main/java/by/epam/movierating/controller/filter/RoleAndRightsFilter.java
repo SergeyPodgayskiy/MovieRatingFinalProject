@@ -81,6 +81,10 @@ public class RoleAndRightsFilter implements Filter {
                 return role.equals(Role.GUEST.toString());
             case ParameterName.ADD_MOVIE_PAGE:
                 return role.equals(Role.ADMIN.toString());
+            case ParameterName.ADD_PARTICIPANT_PAGE:
+                return role.equals(Role.ADMIN.toString());
+            case ParameterName.ADD_GENRE_PAGE:
+                return role.equals(Role.ADMIN.toString());
             default:
                 return false;
         }
@@ -102,6 +106,10 @@ public class RoleAndRightsFilter implements Filter {
         String redirectPage = request.getParameter(ParameterName.REDIRECT_PAGE);
         switch (redirectPage) {
             case ParameterName.ADD_MOVIE_PAGE:
+                return true;
+            case ParameterName.ADD_PARTICIPANT_PAGE:
+                return true;
+            case ParameterName.ADD_GENRE_PAGE:
                 return true;
             default:
                 return false;

@@ -23,8 +23,6 @@ public class MovieRoleDAOImpl implements MovieRoleDAO {
                     " INNER JOIN movierole_localization" +
                     " ON movierole.id = movierole_localization.id_movierole " +
                     " AND movierole_localization.language_code = ?";
-    private static final String SQL_GET_PARTICIPANT_ROLE_BY_ID =
-            "SELECT * FROM movierole WHERE id = ?";
     private static final String SQL_UPDATE_PARTICIPANT_ROLE =
             "UPDATE movierole SET name = ? WHERE id = ?";
     private static final String SQL_DELETE_PARTICIPANT_ROLE =
@@ -130,27 +128,28 @@ public class MovieRoleDAOImpl implements MovieRoleDAO {
     }
 
     @Override
-    public MovieRole getParticipantMovieRoleById(int idParticipantMovieRole) //// TODO: 01.07.2017 may be useless
+    public List<MovieRole> getMovieRolesByParticipantId(int idParticipant, String language)
             throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        MovieRole movieRole;
+        List<MovieRole> movieRoles;
         try {
             ConnectionPool connectionPool = ConnectionPool.getInstance();
             connection = connectionPool.getConnection();
-            preparedStatement = connection.prepareStatement(SQL_GET_PARTICIPANT_ROLE_BY_ID);
-            preparedStatement.setInt(1, idParticipantMovieRole);
+            preparedStatement = connection.prepareStatement(SQL_GET_MOVIE_ROLES_BY_PARTICIPANT_ID);
+            preparedStatement.setString(1, language);
+            preparedStatement.setInt(2, idParticipant);
             resultSet = preparedStatement.executeQuery();
-            movieRole = setDataForOneMovieRole(resultSet);
+            movieRoles = setDataForMovieRoles(resultSet);
         } catch (ConnectionPoolException e) {
             throw new DAOException("Can not get a connection", e);
         } catch (SQLException e) {
-            throw new DAOException("Error during SQL_GET_PARTICIPANT_ROLE_BY_ID query", e);
+            throw new DAOException("Error during SQL_GET_MOVIE_ROLES_BY_PARTICIPANT_ID query", e);
         } finally {
             close(connection, preparedStatement, resultSet);
         }
-        return movieRole;
+        return movieRoles;
     }
 
     @Override

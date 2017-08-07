@@ -32,7 +32,7 @@
 
 /*Lato|Nunito|Open+Sans|Oxygen|Poppins|Roboto*/
 .inner-page__wrapper {
-    font-family: Nunito, sans-serif;
+    font-family: Nunito, Roboto, sans-serif;
 }
 
 .nav-tabs {

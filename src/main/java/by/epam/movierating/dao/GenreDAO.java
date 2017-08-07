@@ -13,7 +13,8 @@ import java.util.List;
  *         02.06.2017.
  */
 public interface GenreDAO extends DAODefaultFunctional, JDBCAutocloseable, ColumnExistable {
-    int addGenre(String name) throws DAOException;
+
+    int addGenre(Genre genre, String contentLanguage) throws DAOException;
 
     Genre getGenreById(int idGenre) throws DAOException;
 
@@ -21,7 +22,13 @@ public interface GenreDAO extends DAODefaultFunctional, JDBCAutocloseable, Colum
 
     List<Genre> getAllGenres(String language) throws DAOException;
 
-    boolean updateGenre(Genre genre) throws DAOException;
-
     boolean deleteGenre(int idGenre) throws DAOException;
+
+    boolean addLocalizedGenreInfo(Genre genre, String contentLanguage) throws DAOException;
+
+    boolean updateLocalizedGenreInfo(Genre genre, String contentLanguage) throws DAOException;
+
+    boolean checkLocalizedGenreInfoByCode(int genreId, String languageCode) throws DAOException;
+
+    Genre getLocalizedGenreInfoByCode(int genreId, String languageCode) throws DAOException;
 }

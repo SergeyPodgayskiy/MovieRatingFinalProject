@@ -16,7 +16,7 @@ public interface MovieRoleDAO extends DAODefaultFunctional, JDBCAutocloseable, C
 
     int addParticipantMovieRole(MovieRole movieRole) throws DAOException;
 
-    MovieRole getParticipantMovieRoleById(int idParticipantMovieRole) throws DAOException;
+    List<MovieRole> getMovieRolesByParticipantId(int idParticipant, String language) throws DAOException;
 
     boolean updateParticipantMovieRole(MovieRole movieRole) throws DAOException;
 

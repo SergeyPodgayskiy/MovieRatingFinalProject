@@ -72,4 +72,22 @@ public class GenreDAOImplTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void addGenre() {
+        String language = "en_EN";
+        String horor = "horor";
+        String description = "drama description";
+        Genre genre = new Genre();
+        genre.setName(horor);
+        genre.setDescription(description);
+        try {
+            int genreId = genreDAO.addGenre(genre, language);
+            Assert.assertNotNull(genreId);
+            genre.setId(genreId);
+            System.out.println(genre.toString());
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
 }

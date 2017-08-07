@@ -16,7 +16,7 @@ public interface MovieDAO extends DAODefaultFunctional, JDBCAutocloseable, Colum
 
     int addMovie(Movie movie) throws DAOException;
 
-    boolean addLanguageDependentMovieInfo(Movie movie, String contentLanguage) throws DAOException;
+    boolean addLocalizedMovieInfo(Movie movie, String contentLanguage) throws DAOException;
 
     boolean addGenreForMovie(int idMovie, int genreId) throws DAOException;
 
@@ -55,11 +55,12 @@ public interface MovieDAO extends DAODefaultFunctional, JDBCAutocloseable, Colum
 
     boolean updateMovie(Movie movie) throws DAOException;
 
-    boolean checkLanguageMovieInfoByCode(int movieId, String languageCode)
+    boolean checkLocalizedMovieInfo(int movieId, String languageCode)
             throws DAOException;
 
-    Movie getLanguageMovieInfoByCode(int movieId, String languageCode) throws DAOException;
+    Movie getLocalizedMovieInfo(int movieId, String languageCode) throws DAOException;
 
-    boolean updateLangDependentMovieInfo(Movie movie, String contentLanguage) throws DAOException;
+    boolean updateLocalizedMovieInfo(Movie movie, String contentLanguage) throws DAOException;
 
+    List<Movie> getMoviesByParticipantId(int idParticipant, String currentLanguage) throws DAOException;
 }

@@ -13,4 +13,7 @@ public interface MovieRoleService {
 
     List<MovieRole> getAllMovieRoles(String currentLanguage)
             throws ServiceException;
+
+    List<MovieRole> getMovieRolesByParticipantId(int participantId, String currentLanguage)
+            throws ServiceException;
 }

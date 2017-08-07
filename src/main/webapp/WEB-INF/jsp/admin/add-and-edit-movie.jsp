@@ -59,7 +59,7 @@
                             <div class="card">
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="active">
-                                        <a href="Controller?command=redirect&redirectPage=addMoviePage&previousPageQuery=${pageContext.request.queryString}"
+                                        <a href="Controller?command=redirect&redirectPage=addMoviePage"
                                            role="tab">
                                             <fmt:message bundle="${loc}" key="add.movie.page"/>
                                         </a>
@@ -217,7 +217,7 @@
                                                 <div id="add-poster-movie" class="panel panel-default">
                                                     <form action="UploadServlet" method="post"
                                                           enctype="multipart/form-data">
-                                                        <div class="panel-heading">Poster</div>
+                                                        <div class="panel-heading"> <fmt:message bundle="${loc}" key="Poster"/></div>
                                                         <div class="panel-body">Poster</div>
                                                         <div class="panel-footer">
                                                             <button id="upload-poster" type="button"

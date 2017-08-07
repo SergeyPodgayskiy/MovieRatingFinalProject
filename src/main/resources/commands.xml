@@ -100,8 +100,8 @@
         <command-class>by.epam.movierating.command.impl.movie.DeleteCountryForMovieCommand</command-class>
     </command>
     <command>
-        <command-name>add-language-dependent-movie-info</command-name>
-        <command-class>by.epam.movierating.command.impl.movie.AddLanguageDependentMovieInfoCommand</command-class>
+        <command-name>add-localized-movie-info</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.AddLocalizedMovieInfoCommand</command-class>
     </command>
     <command>
         <command-name>add-participant-for-movie</command-name>
@@ -120,16 +120,16 @@
         <command-class>by.epam.movierating.command.impl.movie.DeleteGenreForMovieCommand</command-class>
     </command>
     <command>
-        <command-name>check-language-movie-info-by-code</command-name>
-        <command-class>by.epam.movierating.command.impl.movie.CheckLanguageMovieInfoByCodeCommand</command-class>
+        <command-name>check-localized-movie-info</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.CheckLocalizedMovieInfoCommand</command-class>
     </command>
     <command>
-        <command-name>get-language-movie-info-by-code</command-name>
-        <command-class>by.epam.movierating.command.impl.movie.GetLanguageMovieInfoByCodeCommand</command-class>
+        <command-name>get-localized-movie-info</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.GetLocalizedMovieInfoCommand</command-class>
     </command>
     <command>
-        <command-name> update-language-dependent-movie-info</command-name>
-        <command-class>by.epam.movierating.command.impl.movie.UpdateLangDependentMovieInfoCommand</command-class>
+        <command-name> update-localized-movie-info</command-name>
+        <command-class>by.epam.movierating.command.impl.movie.UpdateLocalizedMovieInfoCommand</command-class>
     </command>
     <command>
         <command-name>delete-movie</command-name>
@@ -158,7 +158,58 @@
         <command-name>get-participants-in-movie</command-name>
         <command-class>by.epam.movierating.command.impl.participant.GetParticipantsInMovieCommand</command-class>
     </command>
-
+    <command>
+        <command-name>create-participant</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.CreateParticipantCommand</command-class>
+    </command>
+    <command>
+        <command-name>update-participant</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.UpdateParticipantCommand</command-class>
+    </command>
+    <command>
+        <command-name>check-localized-participant-info</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.CheckLocalizedParticipantInfoCommand</command-class>
+    </command>
+    <command>
+        <command-name>get-localized-participant-info</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.GetLocalizedParticipantInfoCommand</command-class>
+    </command>
+    <command>
+        <command-name>add-localized-participant-info</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.AddLocalizedParticipantInfo</command-class>
+    </command>
+    <command>
+        <command-name>update-localized-participant-info</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.UpdateLocalizedParticipantInfoCommand</command-class>
+    </command>
+    <command>
+        <command-name>add-country-for-participant</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.AddCountryForParticipantCommand</command-class>
+    </command>
+    <command>
+        <command-name>add-role-for-participant</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.AddRoleForParticipantCommand</command-class>
+    </command>
+    <command>
+        <command-name>delete-role-for-participant</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.DeleteRoleForParticipantCommand</command-class>
+    </command>
+    <command>
+        <command-name>show-participant-page</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.ShowParticipantPageCommand</command-class>
+    </command>
+    <command>
+        <command-name>show-edit-participant-page</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.ShowEditParticipantPageCommand</command-class>
+    </command>
+    <command>
+        <command-name>get-participant-roles</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.GetParticipantRolesCommand</command-class>
+    </command>
+    <command>
+        <command-name>show-all-actors</command-name>
+        <command-class>by.epam.movierating.command.impl.participant.ShowAllActorsCommand</command-class>
+    </command>
     <!--countries commands-->
     <command>
         <command-name>get-all-countries</command-name>
@@ -177,5 +228,29 @@
     <command>
         <command-name>get-genres-in-movie</command-name>
         <command-class>by.epam.movierating.command.impl.genre.GetGenresInMovieCommand</command-class>
+    </command>
+    <command>
+        <command-name>create-genre</command-name>
+        <command-class>by.epam.movierating.command.impl.genre.CreateGenreCommand</command-class>
+    </command>
+    <command>
+        <command-name>add-localized-genre-info</command-name>
+        <command-class>by.epam.movierating.command.impl.genre.AddLocalizedGenreInfo</command-class>
+    </command>
+    <command>
+        <command-name>update-localized-genre-info</command-name>
+        <command-class>by.epam.movierating.command.impl.genre.UpdateLocalizedGenreInfoCommand</command-class>
+    </command>
+    <command>
+        <command-name>delete-genre</command-name>
+        <command-class>by.epam.movierating.command.impl.genre.DeleteGenreCommand</command-class>
+    </command>
+    <command>
+        <command-name>check-localized-genre-info-by-code</command-name>
+        <command-class>by.epam.movierating.command.impl.genre.CheckLocalizedGenreInfoCommand</command-class>
+    </command>
+    <command>
+        <command-name>get-localized-genre-info-by-code</command-name>
+        <command-class>by.epam.movierating.command.impl.genre.GetLocalizedGenreInfoCommand</command-class>
     </command>
 </commands>

@@ -33,4 +33,24 @@ public interface MovieParticipantDAO extends DAODefaultFunctional, JDBCAutoclose
     List<MovieParticipant> getParticipantsInMovieByRole(int movieId,
                                                         int roleId,
                                                         String currentLanguage) throws DAOException;
+
+    boolean checkLocalizedParticipantInfo(int participantId, String languageCode) throws DAOException;
+
+    MovieParticipant getLocalizedParticipantInfo(int participantId, String languageCode)
+            throws DAOException;
+
+    boolean addLocalizedParticipantInfo(MovieParticipant participant, String contentLanguage)
+            throws DAOException;
+
+    boolean updateLocalizedParticipantInfo(MovieParticipant participant, String contentLanguage)
+            throws DAOException;
+
+    boolean addCountryForParticipant(int participantId, String countryCode) throws DAOException;
+
+    boolean addRoleForParticipant(int participantId, int roleId) throws DAOException;
+
+    boolean deleteRoleForParticipant(int participantId, int roleId) throws DAOException;
+
+    List<MovieParticipant> getAllLimitedActors(String currentLanguage, int currentPageNumber)
+            throws DAOException;
 }

@@ -17,11 +17,13 @@ import java.util.List;
  */
 public class MovieParticipantDAOImpl implements MovieParticipantDAO {
     private static final String SQL_ADD_PARTICIPANT =
-            "INSERT INTO participant (country_code, name, surname, birth_date, sex, photo_url)" +
-                    " VALUES (?,?,?,?,?.?)";
+            "INSERT INTO participant (birth_date) VALUES (?)";
     private static final String SQL_GET_PARTICIPANT_BY_ID =
-            "SELECT * FROM participant" +
-                    " WHERE movieparticipant.id=?";
+            "SELECT participant.*, participant_localization.name, participant_localization.surname" +
+                    " FROM participant INNER JOIN participant_localization ON" +
+                    " participant.id = participant_localization.id_participant" +
+                    " AND participant_localization.language_code = ?" +
+                    " WHERE participant.id=?";
     private static final String SQL_GET_PARTICIPANTS_BY_MOVIE_ID =
             "SELECT DISTINCT participant.*, participant_loc.name, participant_loc.surname " +
                     " FROM participant" +
@@ -47,8 +49,7 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
 
     private static final String SQL_UPDATE_PARTICIPANT =
             "UPDATE participant" +
-                    " SET country_code = ?, name = ?, surname = ?, birth_date = ?, sex = ?" +
-                    " WHERE participant.id = ?";
+                    " SET birth_date = ? WHERE participant.id = ?";
     private static final String SQL_DELETE_PARTICIPANT =
             "UPDATE participant SET deleted_at = ? WHERE id = ?";
     private static final String SQL_UPDATE_PARTICIPANT_PHOTO =
@@ -64,7 +65,38 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
                     " WHERE movie_participant.id_movierole = ?" +
                     " AND movie_participant.id_movie = ?" +
                     " ORDER BY participant_loc.name ";
-
+    private static final String SQL_CHECK_LANGUAGE_PARTICIPANT_INFO_BY_CODE =
+            "SELECT * FROM participant_localization WHERE id_participant = ? AND language_code = ?";
+    private static final String SQL_GET_LANGUAGE_PARTICIPANT_INFO_BY_CODE =
+            " SELECT participant.*,p_loc.name,p_loc.surname " +
+                    " FROM participant INNER JOIN participant_localization AS p_loc" +
+                    " ON participant.id = p_loc.id_participant AND" +
+                    " language_code = ? WHERE id_participant = ?";
+    private static final String SQL_ADD_LANGUAGE_DEPENDENT_PARTICIPANT_INFO =
+            " INSERT INTO participant_localization(id_participant, language_code, name, surname)" +
+                    " VALUES (?,?,?,?)";
+    private static final String SQL_UPDATE_LANGUAGE_DEPENDENT_PARTICIPANT_INFO =
+            " UPDATE participant_localization SET name = ?, surname = ?" +
+                    " WHERE id_participant = ? AND language_code = ?";
+    private static final String SQL_ADD_COUNTRY_FOR_PARTICIPANT =
+            " UPDATE participant SET country_code = ? WHERE id = ?";
+    private static final String SQL_ADD_ROLE_FOR_PARTICIPANT =
+            " INSERT INTO participant_movierole(id_participant, id_movierole) VALUES (?,?)";
+    private static final String SQL_DELETE_ROLE_FOR_PARTICIPANT =
+            " DELETE FROM participant_movierole WHERE id_participant = ? AND id_movierole = ?";
+    private static final String SQL_GET_ALL_LIMITED_ACTORS =
+            " SELECT participant.*, p_loc.name, p_loc.surname" +
+                    " FROM participant" +
+                    " INNER JOIN participant_localization AS p_loc" +
+                    " ON participant.id = p_loc.id_participant " +
+                    " INNER JOIN participant_movierole" +
+                    " ON participant.id=participant_movierole.id_participant" +
+                    " AND p_loc.language_code = ?" +
+                    " WHERE participant_movierole.id_movierole = ? AND participant.deleted_at IS NULL " +
+                    "ORDER BY p_loc.name, p_loc.surname" +
+                    " LIMIT ?,?";
+    private static final int ID_ROLE_ACTOR = 3;
+    private static final int LIMIT_ACTOR_COUNT = 5;
 
     @Override
     public int addMovieParticipant(MovieParticipant movieParticipant) throws DAOException {
@@ -78,12 +110,7 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
             connection = connectionPool.getConnection();
             preparedStatement = connection.prepareStatement(SQL_ADD_PARTICIPANT,
                     Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, movieParticipant.getCountry().getCode());
-            preparedStatement.setString(2, movieParticipant.getName());
-            preparedStatement.setString(3, movieParticipant.getSurname());
-            preparedStatement.setDate(4,
-                    convertJavaDateToSqlDate(movieParticipant.getBirthDate()));
-            preparedStatement.setString(6, movieParticipant.getPhotoURL());
+            preparedStatement.setDate(1, convertJavaDateToSqlDate(movieParticipant.getBirthDate()));
             isAdded = (preparedStatement.executeUpdate() == oneAffectedRow);
             if (isAdded) {
                 participantId = returnGeneratedId(preparedStatement);
@@ -101,6 +128,135 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
     }
 
     @Override
+    public boolean addLocalizedParticipantInfo(MovieParticipant participant,
+                                               String contentLanguage)
+            throws DAOException {
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        boolean isAdded;
+        int oneAffectedRow = 1;
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+            connection = connectionPool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_ADD_LANGUAGE_DEPENDENT_PARTICIPANT_INFO);
+            preparedStatement.setInt(1, participant.getId());
+            preparedStatement.setString(2, contentLanguage);
+            preparedStatement.setString(3, participant.getName());
+            preparedStatement.setString(4, participant.getSurname());
+            isAdded = (preparedStatement.executeUpdate() == oneAffectedRow);
+        } catch (ConnectionPoolException e) {
+            throw new DAOException("Can not get a connection", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error during SQL_ADD_LANGUAGE_DEPENDENT_PARTICIPANT_INFO query", e);
+        } finally {
+            close(connection, preparedStatement);
+        }
+        return isAdded;
+    }
+
+    @Override
+    public boolean addCountryForParticipant(int participantId, String countryCode)
+            throws DAOException {
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        boolean isAdded;
+        int oneAffectedRow = 1;
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+            connection = connectionPool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_ADD_COUNTRY_FOR_PARTICIPANT);
+            preparedStatement.setString(1, countryCode);
+            preparedStatement.setInt(2, participantId);
+            isAdded = (preparedStatement.executeUpdate() == oneAffectedRow);
+        } catch (ConnectionPoolException e) {
+            throw new DAOException("Can not get a connection ", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error during SQL_ADD_COUNTRY_FOR_PARTICIPANT query", e);
+        } finally {
+            close(connection, preparedStatement);
+        }
+        return isAdded;
+    }
+
+    @Override
+    public boolean addRoleForParticipant(int participantId, int roleId) throws DAOException {
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        boolean isAdded;
+        int oneAffectedRow = 1;
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+            connection = connectionPool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_ADD_ROLE_FOR_PARTICIPANT);
+            preparedStatement.setInt(1, participantId);
+            preparedStatement.setInt(2, roleId);
+            isAdded = (preparedStatement.executeUpdate() == oneAffectedRow);
+        } catch (ConnectionPoolException e) {
+            throw new DAOException("Can not get a connection ", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error during SQL_ADD_ROLE_FOR_PARTICIPANT query", e);
+        } finally {
+            close(connection, preparedStatement);
+        }
+        return isAdded;
+    }
+
+    @Override
+    public boolean deleteRoleForParticipant(int participantId, int roleId)
+            throws DAOException {
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        boolean isDeleted;
+        int oneAffectedRow = 1;
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+            connection = connectionPool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_DELETE_ROLE_FOR_PARTICIPANT);
+            preparedStatement.setInt(1, participantId);
+            preparedStatement.setInt(2, roleId);
+            isDeleted = (preparedStatement.executeUpdate() == oneAffectedRow);
+        } catch (ConnectionPoolException e) {
+            throw new DAOException("Can not get a connection ", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error during SQL_DELETE_ROLE_FOR_PARTICIPANT query", e);
+        } finally {
+            close(connection, preparedStatement);
+        }
+        return isDeleted;
+    }
+
+    @Override
+    public boolean updateLocalizedParticipantInfo(MovieParticipant participant,
+                                                  String contentLanguage) throws DAOException {
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        boolean isUpdated;
+        int oneAffectedRow = 1;
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+            connection = connectionPool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_LANGUAGE_DEPENDENT_PARTICIPANT_INFO);
+            preparedStatement.setString(1, participant.getName());
+            preparedStatement.setString(2, participant.getSurname());
+            preparedStatement.setInt(3, participant.getId());
+            preparedStatement.setString(4, contentLanguage);
+            isUpdated = (preparedStatement.executeUpdate() == oneAffectedRow);
+        } catch (ConnectionPoolException e) {
+            throw new DAOException("Can not get a connection", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error during SQL_UPDATE_LANGUAGE_DEPENDENT_PARTICIPANT_INFO query", e);
+        } finally {
+            close(connection, preparedStatement);
+        }
+        return isUpdated;
+    }
+
+    @Override
     public MovieParticipant getMovieParticipantById(int idParticipant, String language)
             throws DAOException {
 
@@ -112,7 +268,8 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
             ConnectionPool connectionPool = ConnectionPool.getInstance();
             connection = connectionPool.getConnection();
             preparedStatement = connection.prepareStatement(SQL_GET_PARTICIPANT_BY_ID);
-            preparedStatement.setInt(1, idParticipant);
+            preparedStatement.setString(1, language);
+            preparedStatement.setInt(2, idParticipant);
             resultSet = preparedStatement.executeQuery();
             movieParticipant = setDataForOneParticipant(resultSet);
         } catch (ConnectionPoolException e) {
@@ -210,12 +367,9 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
             ConnectionPool connectionPool = ConnectionPool.getInstance();
             connection = connectionPool.getConnection();
             preparedStatement = connection.prepareStatement(SQL_UPDATE_PARTICIPANT);
-            preparedStatement.setString(1, movieParticipant.getCountry().getCode()); //todo ?
-            preparedStatement.setString(2, movieParticipant.getName());
-            preparedStatement.setString(3, movieParticipant.getSurname());
-            preparedStatement.setDate(4,
+            preparedStatement.setDate(1,
                     convertJavaDateToSqlDate(movieParticipant.getBirthDate()));
-            preparedStatement.setInt(6, movieParticipant.getId());
+            preparedStatement.setInt(2, movieParticipant.getId());
             isUpdated = (preparedStatement.executeUpdate() == oneAffectedRow);
         } catch (ConnectionPoolException e) {
             throw new DAOException("Can not get a connection", e);
@@ -299,6 +453,86 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
             close(connection, preparedStatement, resultSet);
         }
         return participantList;
+    }
+
+    @Override
+    public boolean checkLocalizedParticipantInfo(int participantId, String languageCode)
+            throws DAOException {
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        boolean isExist;
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+            connection = connectionPool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_CHECK_LANGUAGE_PARTICIPANT_INFO_BY_CODE);
+            preparedStatement.setInt(1, participantId);
+            preparedStatement.setString(2, languageCode);
+            resultSet = preparedStatement.executeQuery();
+            isExist = resultSet.next();
+        } catch (ConnectionPoolException e) {
+            throw new DAOException("Can not get a connection", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error during SQL_CHECK_LANGUAGE_PARTICIPANT_INFO_BY_CODE query", e);
+        } finally {
+            close(connection, preparedStatement, resultSet);
+        }
+        return isExist;
+    }
+
+    @Override
+    public MovieParticipant getLocalizedParticipantInfo(int participantId, String languageCode)
+            throws DAOException {
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        MovieParticipant participant;
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+            connection = connectionPool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_GET_LANGUAGE_PARTICIPANT_INFO_BY_CODE);
+            preparedStatement.setString(1, languageCode);
+            preparedStatement.setInt(2, participantId);
+            resultSet = preparedStatement.executeQuery();
+            participant = setDataForOneParticipant(resultSet);
+        } catch (ConnectionPoolException e) {
+            throw new DAOException("Can not get a connection", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error during SQL_GET_LANGUAGE_PARTICIPANT_INFO_BY_CODE query", e);
+        } finally {
+            close(connection, preparedStatement, resultSet);
+        }
+        return participant;
+    }
+
+    @Override
+    public List<MovieParticipant> getAllLimitedActors(String currentLanguage, int currentPageNumber)
+            throws DAOException {
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<MovieParticipant> participantsList;
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+            connection = connectionPool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_GET_ALL_LIMITED_ACTORS);
+            preparedStatement.setString(1, currentLanguage);
+            preparedStatement.setInt(2, ID_ROLE_ACTOR);
+            preparedStatement.setInt(3, LIMIT_ACTOR_COUNT * (currentPageNumber - 1));
+            preparedStatement.setInt(4, LIMIT_ACTOR_COUNT);
+            resultSet = preparedStatement.executeQuery();
+            participantsList = setDataForParticipants(resultSet);
+        } catch (ConnectionPoolException e) {
+            throw new DAOException("Can not get a connection", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error during SQL_GET_ALL_LIMITED_ACTORS query", e);
+        } finally {
+            close(connection, preparedStatement, resultSet);
+        }
+        return participantsList;
     }
 
     private MovieParticipant setDataForOneParticipant(ResultSet resultSet)

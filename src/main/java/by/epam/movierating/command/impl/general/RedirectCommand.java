@@ -38,6 +38,12 @@ public class RedirectCommand implements Command {
             case ParameterName.ADD_MOVIE_PAGE: {
                 return PageName.ADD_AND_EDIT_MOVIE_PAGE;
             }
+            case ParameterName.ADD_PARTICIPANT_PAGE: {
+                return PageName.ADD_AND_EDIT_PARTICIPANT_PAGE;
+            }
+            case ParameterName.ADD_GENRE_PAGE: {
+                return PageName.ADD_AND_EDIT_GENRE_PAGE;
+            }
            /*
             case ParameterName.SUCCESS_ADD_MOVIE: {
                 return PageName.SUCCESS_MOVIE_ADD;

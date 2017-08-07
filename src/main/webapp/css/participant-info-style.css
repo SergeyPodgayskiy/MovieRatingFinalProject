@@ -1,0 +1,48 @@
+.participant-photo {
+    /*box-shadow: 0 0 1px rgb(156, 138, 138);*/
+    box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8
+}
+
+.photo-side {
+    padding-left: 0;
+}
+
+.participant-name-divider {
+    margin-top: 0;
+}
+
+.participant-table {
+    border-collapse: separate;
+}
+
+.participant-table > tbody > tr:first-child > td {
+    border: none;
+}
+
+.participant-table > tbody > tr > td:first-child {
+    width: 43%;
+}
+
+.participant-table > tbody > tr:last-child:not(.table-footer) > td {
+    border-bottom: 1px solid #ddd;;
+}
+
+.count-movies-section {
+    padding: 20px;
+    border-radius: 2px;
+}
+
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+#participant-id{
+    display: none;
+}
+
+#message{
+    /*position: fixed;*/
+    z-index: 1;
+    width: 100%;
+}
+

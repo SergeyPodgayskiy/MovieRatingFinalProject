@@ -1,0 +1,27 @@
+ #language {
+    width: 100%;
+}
+
+#edit-fields-nf, #edit-fields-lf, #edit-fields-participant,
+#accept-editing-fields-nf, #accept-editing-fields-lf, #participant-id {
+    display: none;
+}
+
+#add-poster-movie .panel-body {
+    height: 430px
+}
+
+.main-buttons-wrapper button {
+    width: 100%;
+}
+
+.message-nf, .message-lf{
+    z-index: 1;
+    width: 100%;
+}
+
+.new-size-alert {
+    padding-top: 6px;
+    padding-bottom: 5px;
+    margin-bottom: 0;
+}

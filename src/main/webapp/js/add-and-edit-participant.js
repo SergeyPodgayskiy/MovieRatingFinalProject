@@ -13,6 +13,7 @@ $(document).ready(function () {
     var editedMsg;
     var selectRole;
     var selectCountries;
+    var savePhoto;
     if (lang === "ru_RU") {
         errorMsg = "Ошибка в процессе выполнения операции";
         addedMsg = "Добавлено";
@@ -20,6 +21,7 @@ $(document).ready(function () {
         selectRole = "Выберите роль";
         selectCountries = "Выберите страну";
         languages = [{id: 'ru_RU', text: 'ru_RU'}, {id: 'en_EN', text: 'en_EN'}]
+        savePhoto = "Сохранить"
     }
     if (lang === "en_EN") {
         errorMsg = "Error during procedure";
@@ -28,6 +30,7 @@ $(document).ready(function () {
         selectRole = "Select role";
         selectCountries = "Select countries";
         languages = [{id: 'en_EN', text: 'en_EN'}, {id: 'ru_RU', text: 'ru_RU'}]
+        savePhoto = "Save"
     }
     var countries = [{id: '-1', text: selectCountries}];
     $("#language").select2({
@@ -72,7 +75,7 @@ $(document).ready(function () {
     if (!isExistParticipantId) {
         $("#country, #role, #language, #name, #surname, " +
             " #accept-fields-lf, #clear-fields-lf, #clear-fields-nf," +
-            "#save-movie-btn, #decline-add-movie-btn").prop("disabled", true);
+            "#save-participant-btn, #decline-add-aprticipant-btn").prop("disabled", true);
 
         $(".frame-nf-step1").css({
             "box-shadow": "inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(74, 86, 224, 0.8)",
@@ -123,7 +126,7 @@ $(document).ready(function () {
         $("#birthdate, #clear-fields-nf").prop("disabled", false);
         $("#country, #role, #language, #surname, #name, #accept-fields-lf, #clear-fields-lf," +
             "#accept-fields-nf," +
-            "#save-movie-btn, #decline-add-movie-btn").prop("disabled", true);
+            "#save-participant-btn, #decline-add-participant-btn").prop("disabled", true);
         $(".frame-nf-step1").css({
             "box-shadow": "inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(74, 86, 224, 0.8)",
             "padding": "5px"
@@ -457,6 +460,82 @@ $(document).ready(function () {
         });
     });
 
+    $('#upload-poster').on('click', function () {
+        $('#upload-poster').hide();
+        $('#poster-form-wrapper').html(
+            "<div class='row row__margin_0'>" + "<form method='post'" +
+            "action='UploadServlet'" +
+            "enctype='multipart/form-data'>" +
+            "<div class='col-sm-7'><input id='image-path' name='data' type='file'></div> " +
+
+            "</form>" +
+            "<div id='for-click' class='col-sm-5'><button id='save-participant-photo-btn' class='btn btn-primary btn-sm pull-right'></button></div></div>");
+        $('#save-participant-photo-btn').text(savePhoto);
+    });
+
+
+    $('#poster-form-wrapper').on('click', '#save-participant-photo-btn', function (e) {
+        var fileInput = document.getElementById('image-path');
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        formData.append('image-path', file);
+        $.ajax({
+            type: 'post',
+            data: formData,
+            url: 'UploadServlet?command=upload-participant-photo&participantId=' + participantId,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: $url,
+                    data: {
+                        participantId: participantId,
+                        command: 'get-participant-photo'
+                    },
+                    success: function (posterPath) {
+                        $('.participant-poster').attr({
+                            'width': 430,
+                            'height': 465,
+                            'src': '/' + posterPath
+                        });
+                        $('#save-participant-photo-btn').hide();
+                    }
+                });
+            },
+            error: function (data) {
+                alert(errorMsg);
+            }
+        });
+    });
+
+    if(isExistParticipantId){
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: $url,
+            data: {
+                participantId: participantId,
+                command: 'get-participant-photo'
+            },
+            success: function (photoPath) {
+                $('.participant-poster').attr({
+                    'width': 430,
+                    'height': 465,
+                    'src': '/' + photoPath
+                });
+                $('#save-participant-photo-btn').hide();
+            }
+        });
+    }
+
+    $('#poster-form-wrapper').on('click', '#image-path', function () {
+        if ($('#save-participant-photo-btn').css('display') === 'none') {
+            $('#save-participant-photo-btn').show();
+        }
+    });
+
     function initCountriesList(data) {
 
         for (var i = 0; i < data.length; i++) {
@@ -507,21 +586,6 @@ $(document).ready(function () {
         }
     }
 
-    /*(function () {
-
-     var empty = false;
-     $('.frame-nf-step1 input').each(function () {
-     if ($('.datepicker').val().trim().length == 0) {
-     empty = true;
-     }
-     });
-
-     if (empty) {
-     $('#accept-fields-nf, #clear-fields-nf').prop('disabled', true);
-     } else {
-     $('#accept-fields-nf, #clear-fields-nf').prop('disabled', false);
-     }
-     })();*/
 
     (function () {
         $('.frame-step-3 input').keyup(function () {

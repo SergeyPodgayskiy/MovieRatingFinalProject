@@ -16,13 +16,13 @@ public class UploadUtil {
     private static final String TEMP_DIR = "javax.servlet.context.tempdir";
     private static final String PARTICIPANT = "participant";
     private static final String MOVIE = "movie";
-    private static final String TARGET_PATH = "target\\movie_rating\\WEB-INF";
-    private static final String PARTICIPANT_PATH = "src\\main\\webapp\\images\\participant";
-    private static final String MOVIE_PATH = "src\\main\\webapp\\images\\poster";
-    private static final String TARGET_ACTOR_PATH = "\\images\\actor\\";
-    private static final String TARGET_MOVIE_PATH = "\\images\\poster\\";
-    private static final String IMAGES_PARTICIPANT = "images\\participant\\";
-    private static final String IMAGES_POSTER = "images\\poster\\";
+    private static final String TARGET_PATH = "target\\movieRating\\WEB-INF";
+    private static final String PARTICIPANT_PATH = "src\\main\\webapp\\image\\movie\\participant";
+    private static final String MOVIE_PATH = "src\\main\\webapp\\image\\movie\\poster";
+    private static final String TARGET_PARTICIPANT_PATH = "\\image\\movie\\participant";
+    private static final String TARGET_MOVIE_PATH = "\\image\\movie\\poster";
+    private static final String IMAGES_PARTICIPANT = "image\\movie\\participant\\";
+    private static final String IMAGES_POSTER = "image\\movie\\poster\\";
     private static final String WEB_INF = "\\WEB-INF\\";
     private static final DiskFileItemFactory factory;
     private static final int SIZE=1024;
@@ -104,7 +104,7 @@ public class UploadUtil {
     private static String buildTargetPath(String entityName, String oldPath) {
         switch (entityName) {
             case PARTICIPANT:
-                return oldPath.replace(WEB_INF, TARGET_ACTOR_PATH);
+                return oldPath.replace(WEB_INF, TARGET_PARTICIPANT_PATH);
             case MOVIE:
                 return oldPath.replace(WEB_INF, TARGET_MOVIE_PATH);
             default:

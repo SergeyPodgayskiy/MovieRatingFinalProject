@@ -50,7 +50,22 @@
         <command-name>check-rate-opportunity</command-name>
         <command-class>by.epam.movierating.command.impl.user.CheckRateOpportunityCommand</command-class>
     </command>
-
+    <command>
+        <command-name>review-movie</command-name>
+        <command-class>by.epam.movierating.command.impl.user.ReviewMovieCommand</command-class>
+    </command>
+    <command>
+        <command-name>check-review-opportunity</command-name>
+        <command-class>by.epam.movierating.command.impl.user.CheckReviewOpportunityCommand</command-class>
+    </command>
+    <command>
+        <command-name>delete-review</command-name>
+        <command-class>by.epam.movierating.command.impl.user.DeleteReviewCommand</command-class>
+    </command>
+    <command>
+        <command-name>update-review</command-name>
+        <command-class>by.epam.movierating.command.impl.user.UpdateReviewCommand</command-class>
+    </command>
 
     <!--admin commands-->
     <command>
@@ -68,6 +83,22 @@
     <command>
         <command-name>show-users</command-name>
         <command-class>by.epam.movierating.command.impl.admin.ShowUsersCommand</command-class>
+    </command>
+    <command>
+        <command-name>upload-movie-poster</command-name>
+        <command-class>by.epam.movierating.command.impl.upload.UploadMoviePosterCommand</command-class>
+    </command>
+    <command>
+        <command-name>get-movie-poster</command-name>
+        <command-class>by.epam.movierating.command.impl.admin.GetMoviePosterCommand</command-class>
+    </command>
+    <command>
+        <command-name>upload-participant-photo</command-name>
+        <command-class>by.epam.movierating.command.impl.upload.UploadParticipantPhotoCommand</command-class>
+    </command>
+    <command>
+        <command-name>get-participant-photo</command-name>
+        <command-class>by.epam.movierating.command.impl.admin.GetParticipantPhotoCommand</command-class>
     </command>
 
     <!--movie commands-->
@@ -210,6 +241,7 @@
         <command-name>show-all-actors</command-name>
         <command-class>by.epam.movierating.command.impl.participant.ShowAllActorsCommand</command-class>
     </command>
+
     <!--countries commands-->
     <command>
         <command-name>get-all-countries</command-name>

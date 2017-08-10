@@ -311,4 +311,32 @@ public class MovieParticipantServiceImpl implements MovieParticipantService {
 
         return actorsMap;
     }
+
+    @Override
+    public boolean uploadParticipantPhoto(int idParticipant, String fileName) throws ServiceException {
+
+        boolean isUploaded;
+        try {
+            DAOFactory daoFactory = DAOFactory.getInstance();
+            MovieParticipantDAO participantDAO = daoFactory.getMovieParticipantDAO();
+            isUploaded = participantDAO.uploadMovieParticipantPhoto(idParticipant, fileName);
+        } catch (DAOException e) {
+            throw new ServiceException("Error during uploading photo for participant", e);
+        }
+        return isUploaded;
+    }
+
+    @Override
+    public String getParticipantPhoto(int idParticipant) throws ServiceException {
+
+        String posterPath;
+        try {
+            DAOFactory daoFactory = DAOFactory.getInstance();
+            MovieParticipantDAO participantDAO = daoFactory.getMovieParticipantDAO();
+            posterPath = participantDAO.getParticipantPhoto(idParticipant);
+        } catch (DAOException e) {
+            throw new ServiceException("Error during getting participant photo by participant id", e);
+        }
+        return posterPath;
+    }
 }

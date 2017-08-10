@@ -97,6 +97,8 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
                     " LIMIT ?,?";
     private static final int ID_ROLE_ACTOR = 3;
     private static final int LIMIT_ACTOR_COUNT = 5;
+    private static final String SQL_GET_PARTICIPANT_PHOTO_BY_ID =
+            "SELECT participant.photo_url FROM participant WHERE participant.id = ?";
 
     @Override
     public int addMovieParticipant(MovieParticipant movieParticipant) throws DAOException {
@@ -533,6 +535,31 @@ public class MovieParticipantDAOImpl implements MovieParticipantDAO {
             close(connection, preparedStatement, resultSet);
         }
         return participantsList;
+    }
+
+    @Override
+    public String getParticipantPhoto(int idParticipant) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        String photoPath = null;
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+            connection = connectionPool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_GET_PARTICIPANT_PHOTO_BY_ID);
+            preparedStatement.setInt(1, idParticipant);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                photoPath = resultSet.getString(Column.PHOTO_URL);
+            }
+        } catch (ConnectionPoolException e) {
+            throw new DAOException("Can not get a connection", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error during SQL_GET_PARTICIPANT_PHOTO_BY_ID query", e);
+        } finally {
+            close(connection, preparedStatement, resultSet);
+        }
+        return photoPath;
     }
 
     private MovieParticipant setDataForOneParticipant(ResultSet resultSet)

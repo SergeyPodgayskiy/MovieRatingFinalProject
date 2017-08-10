@@ -17,7 +17,6 @@ import java.io.IOException;
 public class CheckRateOpportunityCommand implements Command {
     private static final Logger logger = Logger.getLogger(CheckRateOpportunityCommand.class);
 
-
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

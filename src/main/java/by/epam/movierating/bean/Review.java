@@ -1,7 +1,7 @@
 package by.epam.movierating.bean;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author serge
@@ -11,7 +11,7 @@ public class Review implements Serializable {
     private static final long serialVersionUID = 1L;
     private int idUser;
     private int idMovie;
-    private Timestamp publicationDate;
+    private Date publicationDate;
     private String type;
     private String title;
     private String text;
@@ -35,11 +35,11 @@ public class Review implements Serializable {
         this.idMovie = idMovie;
     }
 
-    public Timestamp getPublicationDate() {
+    public Date getPublicationDate() {
         return publicationDate;
     }
 
-    public void setPublicationDate(Timestamp publicationDate) {
+    public void setPublicationDate(Date publicationDate) {
         this.publicationDate = publicationDate;
     }
 

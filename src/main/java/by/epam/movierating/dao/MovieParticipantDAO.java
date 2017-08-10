@@ -53,4 +53,6 @@ public interface MovieParticipantDAO extends DAODefaultFunctional, JDBCAutoclose
 
     List<MovieParticipant> getAllLimitedActors(String currentLanguage, int currentPageNumber)
             throws DAOException;
+
+    String getParticipantPhoto(int idParticipant) throws DAOException;
 }

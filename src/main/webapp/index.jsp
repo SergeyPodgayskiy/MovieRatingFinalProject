@@ -36,8 +36,10 @@
         </div>
         <div class="col-sm-10 col__padding_0">
             <c:import url="WEB-INF/jsp/template/header.jsp"/>
+
         </div>
     </div>
+            <c:import url="WEB-INF/jsp/template/footer.jsp"/>
 </div>
 </body>
 </html>

@@ -50,4 +50,7 @@ public final class ParameterName {
     public static final String SURNAME = "surname";
 
     public static final String CURRENT_PAGE_NUMBER = "curPageNumber";
+    public static final String REVIEW_TITLE = "reviewTitle";
+    public static final String REVIEW_TEXT = "reviewText";
+    public static final String REVIEW_TYPE = "reviewType";
 }

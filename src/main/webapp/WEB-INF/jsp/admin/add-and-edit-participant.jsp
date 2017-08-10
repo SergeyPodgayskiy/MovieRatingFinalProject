@@ -193,64 +193,22 @@
                                                 </div>
                                             </div>
                                             <div id="poster-adding-wrapper" class="col-md-5">
-                                                <div id="add-poster-movie" class="panel panel-default">
-                                                    <form action="UploadServlet" method="post"
-                                                          enctype="multipart/form-data">
+                                                <div id="add-poster-participant" class="panel panel-default">
                                                         <div class="panel-heading"> <fmt:message bundle="${loc}" key="Photo"/></div>
-                                                        <div class="panel-body">Poster</div>
-                                                        <div class="panel-footer">
+                                                        <div class="panel-body">
+                                                            <div>
+                                                                <img class="img-responsive participant-poster">
+                                                            </div>
+                                                        </div>
+                                                        <div class="panel-footer" >
+                                                            <div id="poster-form-wrapper" class="row row__margin_0">
+                                                            </div>
                                                             <button id="upload-poster" type="button"
                                                                     class="btn btn-primary">
-                                                                <fmt:message bundle="${loc}" key="browse"/>
-                                                            </button>
-                                                            <button id="delete-poster" type="button"
-                                                                    class="btn btn-default">
-                                                                <fmt:message bundle="${loc}" key="delete"/>
+                                                                <fmt:message bundle="${loc}" key="add.photo"/>
                                                             </button>
                                                         </div>
-                                                    </form>
                                                 </div>
-                                               <%-- <div class="panel panel-default">
-                                                    <div class="panel-heading"><fmt:message bundle="${loc}"
-                                                                                            key="Participants"/></div>
-                                                    <div class="panel-body">
-                                                        <div class="form-group">
-                                                            <label for="actors" class=""> <fmt:message bundle="${loc}"
-                                                                                                       key="actors"/></label>
-                                                            <select id="actors" class="actors "
-                                                                    multiple="multiple" style="width: 100%">
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="directors" class=""> <fmt:message
-                                                                    bundle="${loc}" key="Director"/></label>
-                                                            <select id="directors" class="directors "
-                                                                    multiple="multiple" style="width: 100%">
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="writers" class=""> <fmt:message bundle="${loc}"
-                                                                                                        key="Writer"/></label>
-                                                            <select id="writers" class="writers "
-                                                                    multiple="multiple" style="width: 100%">
-                                                            </select>
-                                                        </div>
-                                                    </div>--%>
-                                                    <%-- <div class="panel-footer">
-                                                         <button id="accept-fields-participant" type="button"
-                                                                 class="btn btn-primary">
-                                                             Accept
-                                                         </button>
-                                                         <button id="edit-fields-participant" type="button"
-                                                                 class="btn btn-info">
-                                                             Edit
-                                                         </button>
-                                                         <button id="clear-fields-participant" type="button"
-                                                                 class="btn btn-default">
-                                                             Clear
-                                                         </button>
-                                                     </div>
-                                                </div>--%>
                                                 <div class="main-buttons-wrapper row__margin_0">
                                                     <div class="col-sm-5 col__padding_0">
                                                         <button id="save-participant-btn" class="btn btn-success btn-lg"
@@ -276,6 +234,7 @@
             </div>
         </div>
     </div>
+    <c:import url="/WEB-INF/jsp/template/footer.jsp"/>
 </div>
 <!-- Save movie Modal -->
 <div class="modal fade" id="save-participant-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

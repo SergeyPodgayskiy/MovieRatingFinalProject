@@ -1,6 +1,7 @@
 package by.epam.movierating.command.impl.movie;
 
 import by.epam.movierating.bean.*;
+import by.epam.movierating.bean.dto.ReviewDTO;
 import by.epam.movierating.command.Command;
 import by.epam.movierating.command.constant.AttributeName;
 import by.epam.movierating.command.constant.PageName;
@@ -42,14 +43,16 @@ public class ShowMoviePageCommand implements Command {
         ReviewService reviewService = serviceFactory.getReviewService();
 
         try {
-            Movie movie = movieService.getMovieById(movieId,currentLanguage);
+            Movie movie = movieService.getMovieById(movieId, currentLanguage);
             request.setAttribute(AttributeName.MOVIE, movie);
-            List<Country> countryList = countryService.getCountriesByMovieId(movieId,currentLanguage);
+            List<Country> countryList = countryService.getCountriesByMovieId(movieId, currentLanguage);
             request.setAttribute(AttributeName.COUNTRIES, countryList);
-            List<Genre> genreList = genreService.getGenresByMovieId(movieId,currentLanguage);
+            List<Genre> genreList = genreService.getGenresByMovieId(movieId, currentLanguage);
             request.setAttribute(AttributeName.GENRES, genreList);
+            List<ReviewDTO> reviewDTOList = reviewService.getReviewsDTOByMovieId(movieId);
+            request.setAttribute(AttributeName.REVIEWS, reviewDTOList);
             Map<MovieParticipant, List<MovieRole>> movieParticipantMap
-                    = movieParticipantService.getMovieParticipantsByMovieId(movieId,currentLanguage);
+                    = movieParticipantService.getMovieParticipantsByMovieId(movieId, currentLanguage);
             request.setAttribute(AttributeName.PARTICIPANTS, movieParticipantMap);
             if (session.getAttribute(AttributeName.USER_ID) != null) {
                 int userId = (int) session.getAttribute(AttributeName.USER_ID);

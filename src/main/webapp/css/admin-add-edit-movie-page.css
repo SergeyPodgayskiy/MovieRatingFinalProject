@@ -9,14 +9,18 @@
 }
 
 #add-poster-movie .panel-body {
-    height: 430px
+    height: 534px;
+}
+
+.movie-poster {
+    height: 505px;!important;
 }
 
 .main-buttons-wrapper button {
     width: 100%;
 }
 
-.message-nf, .message-lf{
+.message-nf, .message-lf {
     z-index: 1;
     width: 100%;
 }

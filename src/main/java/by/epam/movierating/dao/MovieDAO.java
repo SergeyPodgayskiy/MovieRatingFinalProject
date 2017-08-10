@@ -63,4 +63,6 @@ public interface MovieDAO extends DAODefaultFunctional, JDBCAutocloseable, Colum
     boolean updateLocalizedMovieInfo(Movie movie, String contentLanguage) throws DAOException;
 
     List<Movie> getMoviesByParticipantId(int idParticipant, String currentLanguage) throws DAOException;
+
+    String getMoviePoster(int idMovie) throws DAOException;
 }

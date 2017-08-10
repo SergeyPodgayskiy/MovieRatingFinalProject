@@ -54,4 +54,6 @@ public interface MovieService {
                                      String slogan) throws ServiceException;
 
     boolean deleteMovieById(int movieId) throws ServiceException;
+
+    String getMoviePoster(int idMovie) throws ServiceException;
 }

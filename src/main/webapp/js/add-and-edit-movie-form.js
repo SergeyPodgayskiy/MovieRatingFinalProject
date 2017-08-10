@@ -28,7 +28,6 @@ $(document).ready(function () {
         data: ageLimits
     });
     var movieId;
-
     var addedMsg;
     var errorMsg;
     var editedMsg;
@@ -37,6 +36,7 @@ $(document).ready(function () {
     var selectActors;
     var selectWriters;
     var selectDirectors;
+    var savePoster;
     if (lang === "ru_RU") {
         errorMsg = "Ошибка в процессе выполнения операции";
         addedMsg = "Добавлено";
@@ -46,6 +46,7 @@ $(document).ready(function () {
         selectActors = "Выберите актеров";
         selectWriters = "Выберите сценариста";
         selectDirectors = "Выберите продюсера";
+        savePoster = "Сохранить";
         languages = [{id: 'ru_RU', text: 'ru_RU'}, {id: 'en_EN', text: 'en_EN'}]
     }
     if (lang === "en_EN") {
@@ -57,6 +58,7 @@ $(document).ready(function () {
         selectActors = "Select actors";
         selectWriters = "Select writers";
         selectDirectors = "Select directors";
+        savePoster = "Save";
         languages = [{id: 'en_EN', text: 'en_EN'}, {id: 'ru_RU', text: 'ru_RU'}]
     }
 
@@ -637,7 +639,7 @@ $(document).ready(function () {
                     movieId: movieId
                 },
                 success: function (data) {
-                    var selected=[];
+                    var selected = [];
                     for (var i = 0; i < data.length; i++) {
                         selected.push(data[i].id);
                     }
@@ -667,7 +669,7 @@ $(document).ready(function () {
                     movieId: movieId
                 },
                 success: function (data) {
-                    var selected=[];
+                    var selected = [];
                     for (var i = 0; i < data.length; i++) {
                         selected.push(data[i].id);
                     }
@@ -698,7 +700,7 @@ $(document).ready(function () {
                     movieId: movieId
                 },
                 success: function (data) {
-                    var selected=[];
+                    var selected = [];
                     for (var i = 0; i < data.length; i++) {
                         selected.push(data[i].id);
                     }
@@ -727,7 +729,7 @@ $(document).ready(function () {
                     movieId: movieId
                 },
                 success: function (data) {
-                    var selected=[];
+                    var selected = [];
                     for (var i = 0; i < data.length; i++) {
                         selected.push(data[i].code);
                     }
@@ -756,7 +758,7 @@ $(document).ready(function () {
                     movieId: movieId
                 },
                 success: function (data) {
-                    var selected=[];
+                    var selected = [];
                     for (var i = 0; i < data.length; i++) {
                         selected.push(data[i].id);
                     }
@@ -768,7 +770,6 @@ $(document).ready(function () {
 
     (function () {
         $('.frame-nf-step1 input').keyup(function () {
-
             var empty = false;
             $('.frame-nf-step1 input').each(function () {
                 if ($(this).val() == '') {
@@ -777,9 +778,9 @@ $(document).ready(function () {
             });
 
             if (empty) {
-                $('#accept-fields-nf, #clear-fields-nf').prop('disabled', true); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+                $('#accept-fields-nf, #clear-fields-nf').prop('disabled', true);
             } else {
-                $('#accept-fields-nf, #clear-fields-nf').prop('disabled', false); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+                $('#accept-fields-nf, #clear-fields-nf').prop('disabled', false);
             }
         });
     })();
@@ -795,28 +796,114 @@ $(document).ready(function () {
             });
 
             if (empty) {
-                $('#accept-fields-lf, #clear-fields-lf').prop('disabled', true); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+                $('#accept-fields-lf, #clear-fields-lf').prop('disabled', true);
             } else {
-                $('#accept-fields-lf, #clear-fields-lf').prop('disabled', false); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+                $('#accept-fields-lf, #clear-fields-lf').prop('disabled', false);
             }
         });
     })();
 
-    /*function checkLanguageMovieInfo() {
-        var languageCode = e.params.data.id;
+    $('#upload-poster').on('click', function () {
+        $('#upload-poster').hide();
+        $('#poster-form-wrapper').html(
+            "<div class='row row__margin_0'>" + "<form method='post'" +
+            "action='UploadServlet'" +
+            "enctype='multipart/form-data'>" +
+            "<div class='col-sm-7'><input id='image-path' name='data' type='file'></div> " +
+
+            "</form>" +
+            "<div id='for-click' class='col-sm-5'><button id='save-movie-poster-btn' class='btn btn-primary btn-sm pull-right'></button></div></div>");
+        $('#save-movie-poster-btn').text(savePoster);
+    });
+
+
+    $('#poster-form-wrapper').on('click', '#save-movie-poster-btn', function (e) {
+        var fileInput = document.getElementById('image-path');
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        formData.append('image-path', file);
+        formData.append('movieId', movieId);
+        $.ajax({
+            type: 'post',
+            data: formData,
+            url: 'UploadServlet?command=upload-movie-poster&movieId=' + movieId,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: $url,
+                    data: {
+                        movieId: movieId,
+                        command: 'get-movie-poster'
+                    },
+                    success: function (posterPath) {
+                        $('.movie-poster').attr({
+                            'width': 430,
+                            'height': 465,
+                            'src': '/' + posterPath
+                        });
+                        $('#save-movie-poster-btn').hide();
+                    }
+                });
+            },
+            error: function (data) {
+                alert(errorMsg);
+            }
+        });
+    });
+
+    if(isExistMovieId){
         $.ajax({
             type: 'POST',
             dataType: 'json',
             url: $url,
             data: {
                 movieId: movieId,
-                contentLanguage: languageCode,
-                command: 'check-localized-info-by-code'
+                command: 'get-movie-poster'
             },
-            success: function (data) {
-                return data;
+            success: function (posterPath) {
+                $('.movie-poster').attr({
+                    'width': 430,
+                    'height': 465,
+                    'src': '/' + posterPath
+                });
+                $('#save-movie-poster-btn').hide();
             }
         });
-    }*/
+    }
+
+    $('#poster-form-wrapper').on('click', '#image-path', function () {
+        if ($('#save-movie-poster-btn').css('display') === 'none') {
+            $('#save-movie-poster-btn').show();
+        }
+    });
+
+    /* $('#poster-form-wrapper').find('form').ajaxForm({
+     success: function(msg) {
+     alert("File has been uploaded successfully");
+     },
+     error: function(msg) {
+     alert(errorMsg);
+     }
+     });*/
+
+    /*function checkLanguageMovieInfo() {
+     var languageCode = e.params.data.id;
+     $.ajax({
+     type: 'POST',
+     dataType: 'json',
+     url: $url,
+     data: {
+     movieId: movieId,
+     contentLanguage: languageCode,
+     command: 'check-localized-info-by-code'
+     },
+     success: function (data) {
+     return data;
+     }
+     });
+     }*/
 })
 ;

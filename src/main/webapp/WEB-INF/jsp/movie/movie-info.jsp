@@ -45,7 +45,6 @@
             </c:choose>
         </div>
         <div class="col-sm-10 col__padding_0">
-
             <div class="row row__margin_0 top-nav__wrapper">
                 <c:import url="../template/header.jsp"/>
                 <div class="col-sm-12 <%--col__padding_0--%> inner-page__wrapper">
@@ -159,9 +158,11 @@
                                             <fmt:formatDate pattern="hh:mm" value="${movie.duration}"/></td>
                                     </tr>
                                     </tbody>
-
                                 </table>
-
+                                <div class="form-group">
+                                    <p class="form-control-static text-muted">«${movie.description}»</p>
+                                </div>
+                                <hr class="movie-title-divider">
                                 <div class="jumbotron" id="rating-section">
                                     <div id="message"></div>
                                     <div id="movie-id">${movie.id}</div>
@@ -223,12 +224,168 @@
                                     </tr>
                                 </table>
                             </div>
+                            <div class="row row__margin_0">
+                                <div class="col-sm-6 col-sm-offset-3">
+                                    <div class="movie-description-divider">
+                                        <fmt:message bundle="${loc}" key="User.reviews"/>
+                                    </div>
+                                    <div class="row row__margin_0 review-form">
+                                        <div class="well well-sm">
+                                            <div id="review-message"></div>
+                                            <div class="text-right">
+                                                <a class="btn btn-success btn-green" href="#reviews-anchor"
+                                                   id="open-review-box">Leave a Review</a>
+                                            </div>
+
+                                            <div class="row" id="post-review-box">
+                                                <div class="col-md-12">
+                                                    <div class="form-group animated">
+                                                        <label class="animated" for="review-title"><fmt:message
+                                                                bundle="${loc}"
+                                                                key="review"/></label>
+                                                        <input type="text" class="form-control animated"
+                                                               id="review-title"
+                                                               placeholder="<fmt:message bundle="${loc}" key="Enter.review.title"/>">
+                                                    </div>
+                                                        <textarea class="form-control animated" cols="100"
+                                                                  id="new-review" name="comment"
+                                                                  placeholder="<fmt:message bundle="${loc}" key="Enter.your.review.here"/>"
+                                                                  rows="10"></textarea>
+
+                                                    <div class="text-right review-button-wrapper animated">
+                                                        <div class="row row__margin_0">
+                                                            <label for="review-type"
+                                                                   class="control-label col-xs-2 col__padding_0 text-muted animated">
+                                                                <fmt:message bundle="${loc}"
+                                                                             key="review.type"/>
+                                                            </label>
+                                                            <div class="form-group form-group-sm col-xs-3 col__padding_0 animated">
+                                                                <select class="form-control review-type animated"
+                                                                        id="review-type">
+                                                                    <option id="neutral-rev"><fmt:message
+                                                                            bundle="${loc}"
+                                                                            key="neutral"/></option>
+                                                                    <option id="positive-rev"><fmt:message
+                                                                            bundle="${loc}"
+                                                                            key="positive"/></option>
+                                                                    <option id="negative-rev"><fmt:message
+                                                                            bundle="${loc}"
+                                                                            key="negative"/></option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-xs-7 col__padding_0 animated">
+                                                                <a class="btn btn-danger btn-sm" href="#"
+                                                                   id="close-review-box">
+                                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                                    Cancel
+                                                                </a>
+                                                                <button id="save-review" class="btn btn-success btn-sm"
+                                                                        type="submit">
+                                                                    Save
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <c:if test="${not empty requestScope.reviews}">
+                                        <c:forEach var="reviewDTO" items="${requestScope.reviews}"
+                                                   varStatus="rank">
+                                            <div class="panel panel-default review
+                                             ${reviewDTO.review.type eq 'positive' ? 'review-positive' : reviewDTO.review.type eq 'negative' ? 'review-negative' : 'review-neutral'}
+                                             ${reviewDTO.review.idUser == sessionScope.userId ? 'blue-frame user-review' : ''}">
+                                                <div class="panel-heading">
+                                                    <div class="row row__margin_0">
+                                                        <div class="col-sm-9 col__padding_0">
+                                                            <c:choose>
+                                                            <c:when test="${reviewDTO.review.idUser == sessionScope.userId}">
+                                                                <div class="col-xs-4 col__padding_0 edit-review-input-wrapper">
+                                                                    <input class="form-control"
+                                                                           id="edit-review-input" type="text">
+                                                                </div>
+                                                                <h4 class="review-title">
+                                                                    <b>${reviewDTO.review.title}</b>
+                                                                    <a id="edit-review-btn" type="button"
+                                                                       class="btn  btn-sm">
+                                                                        <i class="fa fa-pencil fa-lg"></i>
+                                                                        <fmt:message bundle="${loc}" key="edit"/>
+                                                                    </a>
+                                                                    <a id="accept-edit-rev-btn" type="button"
+                                                                       class="btn  btn-sm">
+                                                                        <i class="fa fa-floppy-o fa-lg"></i>
+                                                                        <fmt:message bundle="${loc}" key="save"/>
+                                                                    </a>
+                                                                    <a id="delete-review-btn"
+                                                                       type="button"
+                                                                       class="btn  btn-sm">
+                                                                        <i class="fa fa-times fa-lg"></i>
+                                                                        <fmt:message bundle="${loc}"
+                                                                                     key="delete"/>
+                                                                    </a>
+                                                                </h4>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <h4>${reviewDTO.review.title}</h4>
+                                                                </c:otherwise>
+                                                                </c:choose>
+                                                        </div>
+                                                        <div class="col-sm-3 col__padding_0 bg-info">
+                                                            <h5 class="publication-date">
+                                                                <fmt:formatDate pattern="dd-MM-yyyy"
+                                                                                value="${reviewDTO.review.publicationDate}"/>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="edit-review-form">
+                                                    <textarea rows="10" cols="100" id="old-review"
+                                                              class="form-control review-textarea animated">
+                                                        </textarea>
+                                                        <div class="row row__margin_0">
+                                                            <div class="form-group form-group-sm col-xs-3 col__padding_0">
+                                                                <div id="user-review-type">${reviewDTO.review.type}</div>
+                                                                <select class="form-control review-type animated review-type">
+                                                                    <option class="neutral-rev"><fmt:message
+                                                                            bundle="${loc}"
+                                                                            key="neutral"/></option>
+                                                                    <option class="positive-rev"><fmt:message
+                                                                            bundle="${loc}"
+                                                                            key="positive"/></option>
+                                                                    <option class="negative-rev"><fmt:message
+                                                                            bundle="${loc}"
+                                                                            key="negative"/></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="review-content-form">
+                                                        <p class="review-text">${reviewDTO.review.text}</p>
+                                                        <p class="text-right review-author">
+                                                            <fmt:message bundle="${loc}" key="Author"/>:
+                                                            <code> ${reviewDTO.userLogin}</code>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </c:forEach>
+                                    </c:if>
+                                    <c:if test="${empty requestScope.reviews}">
+                                        <div class="well well-sm bg-info">
+                                            <h4><fmt:message bundle="${loc}" key="No.reviews"/></h4>
+                                        </div>
+                                    </c:if>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <c:import url="/WEB-INF/jsp/template/footer.jsp"/>
 </div>
 <!-- Delete Modal -->
 <div class="modal fade" id="delete-movie-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -245,6 +402,30 @@
             </div>
             <div class="modal-footer">
                 <button id="delete-movie-btn" type="button" class="btn btn-primary">
+                    <fmt:message bundle="${loc}" key="delete"/></button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <fmt:message bundle="${loc}" key="cancel"/>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete review Modal -->
+<div class="modal fade" id="delete-review-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><fmt:message bundle="${loc}" key="confirmation"/></h4>
+            </div>
+            <div class="modal-body">
+
+                <fmt:message bundle="${loc}" key="are.you.sure.you.want.to.delete.review"/>
+            </div>
+            <div class="modal-footer">
+                <button id="accept-delete-review-btn" type="button" class="btn btn-primary">
                     <fmt:message bundle="${loc}" key="delete"/></button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     <fmt:message bundle="${loc}" key="cancel"/>

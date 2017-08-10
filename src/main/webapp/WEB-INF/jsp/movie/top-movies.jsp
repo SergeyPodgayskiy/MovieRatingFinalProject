@@ -19,8 +19,8 @@
     <link href="${pageContext.request.contextPath}/css/top-navbar.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/css/sidebar-menu.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/css/login-modal-style.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/css/datatables.min.css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
     <script src="${pageContext.request.contextPath}/js/jquery.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/datatables.min.js"></script>
@@ -44,7 +44,6 @@
             </c:choose>
         </div>
         <div class="col-sm-10 col__padding_0">
-
             <div class="row row__margin_0 top-nav__wrapper">
                 <c:import url="../template/header.jsp"/>
                 <div class="col-sm-12 <%--col__padding_0--%> inner-page__wrapper">
@@ -165,6 +164,7 @@
             </div>
         </div>
     </div>
+    <c:import url="/WEB-INF/jsp/template/footer.jsp"/>
 </div>
 </body>
 </html>

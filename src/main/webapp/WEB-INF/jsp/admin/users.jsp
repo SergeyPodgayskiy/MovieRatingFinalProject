@@ -172,6 +172,7 @@
             </div>
         </div>
     </div>
+    <c:import url="/WEB-INF/jsp/template/footer.jsp"/>
 </div>
 <!-- Delete Modal -->
 <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

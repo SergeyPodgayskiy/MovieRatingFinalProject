@@ -60,4 +60,8 @@ public interface MovieParticipantService {
 
     Map<MovieParticipant, List<Movie>> getAllLimitedActors(String currentLanguage, int currentPageNumber)
             throws ServiceException;
+
+    boolean uploadParticipantPhoto(int idParticipant, String fileName) throws ServiceException;
+
+    String getParticipantPhoto(int idParticipant) throws ServiceException;
 }

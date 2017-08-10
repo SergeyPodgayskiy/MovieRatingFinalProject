@@ -1,6 +1,7 @@
 package by.epam.movierating.dao;
 
 import by.epam.movierating.bean.Review;
+import by.epam.movierating.bean.dto.ReviewDTO;
 import by.epam.movierating.dao.exception.DAOException;
 import by.epam.movierating.dao.util.ColumnExistable;
 import by.epam.movierating.dao.util.DAODefaultFunctional;
@@ -14,13 +15,15 @@ import java.util.List;
  */
 public interface ReviewDAO extends DAODefaultFunctional, JDBCAutocloseable, ColumnExistable {
 
-    boolean addReview(Review review) throws DAOException;
+    boolean reviewMovie(Review review) throws DAOException;
 
     List<Review> getAllReviewsOrderByDate() throws DAOException;
 
-    List<Review> getReviewsByMovieId(int idMovie, String language) throws DAOException;
+    List<ReviewDTO> getReviewsDTOByMovieId(int idMovie) throws DAOException;
 
     boolean deleteReview(int idMovie, int idUser) throws DAOException;
 
     boolean checkReviewOpportunity(int idMovie, int idUser) throws DAOException;
+
+    boolean updateReview(Review review) throws DAOException;
 }

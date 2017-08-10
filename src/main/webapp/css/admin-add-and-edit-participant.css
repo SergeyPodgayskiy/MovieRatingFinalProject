@@ -7,8 +7,12 @@
     display: none;
 }
 
-#add-poster-movie .panel-body {
-    height: 430px
+#add-poster-participant .panel-body {
+    height: 538px
+}
+
+.participant-poster {
+    height: 505px;!important;
 }
 
 .main-buttons-wrapper button {
@@ -25,3 +29,4 @@
     padding-bottom: 5px;
     margin-bottom: 0;
 }
+

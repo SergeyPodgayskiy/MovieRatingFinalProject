@@ -43,7 +43,6 @@
             </c:choose>
         </div>
         <div class="col-sm-10 col__padding_0">
-
             <div class="row row__margin_0 top-nav__wrapper">
                 <c:import url="../template/header.jsp"/>
                 <div class="col-sm-12 <%--col__padding_0--%> inner-page__wrapper">
@@ -126,7 +125,9 @@
             </div>
         </div>
     </div>
+    <c:import url="/WEB-INF/jsp/template/footer.jsp"/>
 </div>
+
 <!-- Delete Modal -->
 <div class="modal fade" id="delete-participant-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-sm" role="document">

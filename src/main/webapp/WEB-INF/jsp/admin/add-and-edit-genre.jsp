@@ -154,7 +154,7 @@
             </div>
         </div>
     </div>
-</div>
+    <c:import url="/WEB-INF/jsp/template/footer.jsp"/>
 </div>
 <!-- Save movie Modal -->
 <div class="modal fade" id="save-genre-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

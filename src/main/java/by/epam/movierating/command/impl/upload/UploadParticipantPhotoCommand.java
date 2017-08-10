@@ -3,7 +3,7 @@ package by.epam.movierating.command.impl.upload;
 import by.epam.movierating.command.Command;
 import by.epam.movierating.command.constant.ParameterName;
 import by.epam.movierating.controller.util.UploadUtil;
-import by.epam.movierating.service.MovieService;
+import by.epam.movierating.service.MovieParticipantService;
 import by.epam.movierating.service.factory.ServiceFactory;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -19,20 +19,19 @@ import java.util.List;
 
 /**
  * @author serge
- *         25.07.2017.
+ *         10.08.2017.
  */
-public class UploadMoviePosterCommand implements Command {
-    private final static Logger logger = Logger.getLogger(UploadMoviePosterCommand.class);
-    private static final String MOVIE = "movie";
+public class UploadParticipantPhotoCommand implements Command {
+    private final static Logger logger = Logger.getLogger(UploadParticipantPhotoCommand.class);
+    private static final String PARTICIPANT = "participant";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         ServletFileUpload upload = UploadUtil.createServletFileUpload(request);
-        int idMovie = Integer.parseInt(request.getParameter(ParameterName.MOVIE_ID));
+        int idParticipant = Integer.parseInt(request.getParameter(ParameterName.PARTICIPANT_ID));
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
-        MovieService movieService = serviceFactory.getMovieService();
+        MovieParticipantService participantService = serviceFactory.getMovieParticipantService();
 
         ServletContext servletContext = request.getSession().getServletContext();
 
@@ -40,8 +39,8 @@ public class UploadMoviePosterCommand implements Command {
             List<FileItem> fileItems = upload.parseRequest(request);
             for (FileItem item : fileItems) {
                 if (!item.isFormField()) {
-                    String fileName = UploadUtil.processUploadedFile(item, servletContext, MOVIE);
-                    boolean result = movieService.uploadMoviePoster(idMovie, fileName);
+                    String fileName = UploadUtil.processUploadedFile(item, servletContext, PARTICIPANT);
+                    boolean result = participantService.uploadParticipantPhoto(idParticipant, fileName);
                     response.getWriter().print(true);
                 }
             }

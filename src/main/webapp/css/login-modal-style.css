@@ -5,7 +5,7 @@
 .new-style-modal-content {
     border-radius: 3px;
     font-size: 16px;
-    font-family: Oxygen, Roboto;
+    font-family: /*Oxygen,*/ Roboto,sans-serif;
 }
 /*Lato|Nunito|Open+Sans|Oxygen|Poppins|Roboto*/
 .new-style-form-control {

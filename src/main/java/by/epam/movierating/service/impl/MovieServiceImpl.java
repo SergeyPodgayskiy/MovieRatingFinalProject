@@ -282,4 +282,17 @@ public class MovieServiceImpl implements MovieService {
         }
         return isDeleted;
     }
+
+    @Override
+    public String getMoviePoster(int idMovie) throws ServiceException {
+        String posterPath;
+        try {
+            DAOFactory daoFactory = DAOFactory.getInstance();
+            MovieDAO movieDAO = daoFactory.getMovieDAO();
+            posterPath = movieDAO.getMoviePoster(idMovie);
+        } catch (DAOException e) {
+            throw new ServiceException("Error during get movie poster by movie id", e);
+        }
+        return posterPath;
+    }
 }

@@ -27,6 +27,7 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/select2.full.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/add-and-edit-movie-form.js"></script>
     <script src="${pageContext.request.contextPath}/js/loader.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Lato|Nunito|Open+Sans|Oxygen|Poppins|Roboto" rel="stylesheet">
     <title>MovieRating</title>
 </head>
@@ -215,21 +216,21 @@
                                             </div>
                                             <div id="poster-adding-wrapper" class="col-md-5">
                                                 <div id="add-poster-movie" class="panel panel-default">
-                                                    <form action="UploadServlet" method="post"
-                                                          enctype="multipart/form-data">
-                                                        <div class="panel-heading"> <fmt:message bundle="${loc}" key="Poster"/></div>
-                                                        <div class="panel-body">Poster</div>
-                                                        <div class="panel-footer">
-                                                            <button id="upload-poster" type="button"
-                                                                    class="btn btn-primary">
-                                                                <fmt:message bundle="${loc}" key="browse"/>
-                                                            </button>
-                                                            <button id="delete-poster" type="button"
-                                                                    class="btn btn-default">
-                                                                <fmt:message bundle="${loc}" key="delete"/>
-                                                            </button>
+                                                    <div class="panel-heading"><fmt:message bundle="${loc}"
+                                                                                            key="Poster"/></div>
+                                                    <div class="panel-body">
+                                                        <div>
+                                                            <img class="img-responsive movie-poster">
                                                         </div>
-                                                    </form>
+                                                    </div>
+                                                    <div class="panel-footer">
+                                                        <div id="poster-form-wrapper" class="row row__margin_0">
+                                                        </div>
+                                                        <button id="upload-poster" type="button"
+                                                                class="btn btn-primary">
+                                                            <fmt:message bundle="${loc}" key="add.poster"/>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                                 <div class="panel panel-default">
                                                     <div class="panel-heading"><fmt:message bundle="${loc}"
@@ -297,6 +298,7 @@
             </div>
         </div>
     </div>
+    <c:import url="/WEB-INF/jsp/template/footer.jsp"/>
 </div>
 <!-- Save movie Modal -->
 <div class="modal fade" id="save-movie-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

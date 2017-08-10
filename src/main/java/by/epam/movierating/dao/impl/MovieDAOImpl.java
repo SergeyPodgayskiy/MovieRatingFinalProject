@@ -95,6 +95,8 @@ public class MovieDAOImpl implements MovieDAO {
                     " GROUP BY movie.id" +
                     " ORDER BY movie.rating DESC" +
                     " LIMIT ?";
+    private static final String SQL_GET_MOVIE_POSTER_BY_ID =
+            " SELECT poster_url FROM movie WHERE movie.id = ?";
     private static final int LIMIT_MOVIE_COUNT = 5;
 
     @Override
@@ -605,6 +607,31 @@ public class MovieDAOImpl implements MovieDAO {
             close(connection, preparedStatement, resultSet);
         }
         return movieList;
+    }
+
+    @Override
+    public String getMoviePoster(int idMovie) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        String posterPath = null;
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+            connection = connectionPool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_GET_MOVIE_POSTER_BY_ID);
+            preparedStatement.setInt(1, idMovie);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                posterPath = resultSet.getString(Column.POSTER_URL);
+            }
+        } catch (ConnectionPoolException e) {
+            throw new DAOException("Can not get a connection", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error during SQL_GET_MOVIE_POSTER_BY_ID query", e);
+        } finally {
+            close(connection, preparedStatement, resultSet);
+        }
+        return posterPath;
     }
 
     private Movie setDataForOneMovie(ResultSet resultSet) throws SQLException {

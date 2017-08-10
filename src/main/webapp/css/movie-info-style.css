@@ -53,9 +53,99 @@
     display: none;
 }
 
-#message{
-    /*position: fixed;*/
+#message {
     z-index: 1;
     width: 100%;
 }
+
+#review-message {
+    z-index: 1;
+    width: 100%;
+    /*height: 54px;*/
+}
+
+.movie-description-divider {
+    border-bottom: solid #ff5f2b;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.review .publication-date {
+    text-align: center;
+}
+
+.review {
+    /*border-left: solid #ff5f2b;*/
+    border-radius: 1px;
+}
+
+.review-positive {
+    background-color: #d4f8db;
+}
+
+.review-negative {
+    background-color: #f3c5c5;
+}
+
+.review-neutral {
+    background-color: #edeaf3;
+}
+.animated {
+    -webkit-transition: height 0.2s;
+    -moz-transition: height 0.2s;
+    transition: height 0.2s;
+}
+
+#close-review-box {
+    display: none;
+    margin-right: 10px;
+}
+
+#post-review-box {
+    display: none;
+}
+
+.review-button-wrapper {
+    margin-top: 10px;
+}
+
+.review-button-wrapper button {
+    padding: 4px 0;
+    width: 77px;
+}
+
+.review-button-wrapper label {
+    margin-top: 5px;
+    text-align: left;
+}
+
+#open-review-box {
+    background-color: #ff5f2b;
+    border: solid #ff5f2b;
+}
+
+.review-form a, button {
+    border-radius: 2px;
+}
+
+.review-form .well {
+    border-left: solid #ff5f2b;
+}
+
+.blue-frame {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(74, 86, 224, 0.8);
+}
+
+.review-textarea{
+    /*background-color: inherit;*/
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    opacity: 0.8;
+}
+
+.edit-review-input-wrapper, .edit-review-form , #review-id-user, #accept-edit-rev-btn ,#open-review-box, #user-review-type{
+    display: none;
+}
+
 

@@ -55,4 +55,5 @@ public final class AttributeName {
     public static final String PARTICIPANT_MOVIE_ROLES = "movieRoles";
     public static final String PARTICIPANT_ID = "participantId";
     public static final String CURRENT_PAGE_NUMBER = "curPageNumber";
+    public static final String REVIEWS = "reviews";
 }
